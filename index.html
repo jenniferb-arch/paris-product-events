@@ -240,6 +240,8 @@ const DEFAULT_EVENTS = [
   { id:"44", type:"meetup", title:"TPC — Quand le Design System devient le produit", date:"16 juillet 2026, 12h00", dateISO:"2026-07-16", loc:"En ligne", desc:"Maxime Podgorski partage un retour d'expérience sur la transformation d'un design system en produit à part entière. Session en ligne de la communauté The Product Crew.", url:"https://www.meetup.com/fr-fr/theproductcrew/", themes:["design","pm"] },
   { id:"45", type:"meetup", title:"Generative AI Paris (groupe)", date:"Agenda récurrent — à vérifier sur Meetup", dateISO:"", loc:"Paris (lieu variable)", desc:"Communauté Product & Tech autour de l'IA générative (6 100+ membres) — talks et networking.", url:"https://www.meetup.com/generative-ai-paris/", themes:["ia"] },
   { id:"46", type:"meetup", title:"Le Live Yeita (collectif produit)", date:"Agenda récurrent — à vérifier sur Meetup", dateISO:"", loc:"En ligne", desc:"Format live récurrent du collectif produit Yeita : retours d'expérience et débats sur le product management et le product design.", url:"https://www.meetup.com/fr-fr/meetup-group-rotidemamieyeita/", themes:["pm","design"] },
+  { id:"50", type:"meetup", title:"Construisez votre propre modèle de Machine Learning", date:"9 juillet 2026, 12h00", dateISO:"2026-07-09", loc:"En ligne", desc:"Atelier Le Wagon Paris pour construire son propre modèle de Machine Learning avec Python. Inscription via le site Le Wagon (pas besoin de s'inscrire sur Meetup).", url:"https://www.meetup.com/le-wagon-paris-coding-bootcamp/events/", themes:["ia"] },
+  { id:"51", type:"meetup", title:"Le Wagon Paris | Formations Tech & IA (groupe)", date:"Agenda récurrent — à vérifier sur Meetup", dateISO:"", loc:"Paris / en ligne", desc:"Bootcamp tech (14 600+ membres sur Meetup) organisant régulièrement des ateliers gratuits et sessions d'info sur l'IA, la data et le développement.", url:"https://www.meetup.com/fr-fr/le-wagon-paris-coding-bootcamp/", themes:["ia"] },
 
   { id:"28", type:"webinar", title:"SVPG Product Masterclass", date:"7-9 juillet 2026, 8h-13h PDT (~17h-22h Paris)", dateISO:"2026-07-07", loc:"En ligne (Zoom) — Silicon Valley Product Group", desc:"Cours interactif de 3 jours sur les fondamentaux du product management moderne : stratégie, découverte produit, et impact de l'IA générative sur le métier de PM.", url:"https://www.eventbrite.com/e/svpg-product-masterclass-tickets-1989265821622", themes:["pm","ia"] },
   { id:"29", type:"webinar", title:"Agent Analytics — Stop Measuring AI Activity. Start Measuring AI Impact.", date:"15 juillet 2026", dateISO:"2026-07-15", loc:"En ligne — Amplitude", desc:"Amplitude présente « Agent Analytics », qui relie la qualité des agents IA aux métriques de conversion, rétention et revenu.", url:"https://amplitude.com/events", themes:["ia","pm"] },
@@ -268,7 +270,7 @@ const DEFAULT_EVENTS = [
   { id:"49", type:"replay", title:"Vibe Coding — la masterclass du VP Product de Photoroom", date:"", dateISO:"", loc:"Le Ticket — Ahmed Dahbi (Photoroom)", desc:"Masterclass pour apprendre à coder ses prototypes avec Cursor, par le VP Product de Photoroom.", url:"https://www.le-ticket.fr/vibe-coding-la-masterclass-du-vp-product-de-photoroom-pour-appendre-a-coder-ses-prototypes-avec-cursor/147023/", themes:["ia","pm"] }
 ];
 
-const SK = "jb_paris_product_events_v6";
+const SK = "jb_paris_product_events_v7";
 function loadState() {
   try { const s = localStorage.getItem(SK); if (s) return JSON.parse(s); } catch(e) {}
   return { events: DEFAULT_EVENTS };
