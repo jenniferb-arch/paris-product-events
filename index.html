@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Paris Product Events — Meetups, Conférences, Podcasts &amp; Replays</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📅</text></svg>">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -43,6 +44,9 @@
     .nav-foot a:hover { text-decoration: underline; }
 
     main { flex: 1; padding: 2.25rem 2rem 4rem; min-width: 0; }
+    .hero { margin-bottom: 1.5rem; }
+    .hero h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 4px; }
+    .hero p { font-size: 14px; color: var(--text2); }
     .topbar { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap; row-gap: 10px; }
     .search-wrap { flex: 1 1 220px; max-width: 320px; position: relative; }
     .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: var(--text3); pointer-events: none; }
@@ -63,6 +67,7 @@
 
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 13px; }
     .card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--r); padding: 1.1rem; display: flex; flex-direction: column; gap: 10px; position: relative; transition: border-color .15s, transform .12s; cursor: pointer; }
+    .card.no-click { cursor: default; }
     .card:hover { border-color: var(--border-md); transform: translateY(-2px); }
     .card:hover .card-actions { opacity: 1; }
     .card-actions { position: absolute; top: 10px; right: 10px; display: flex; gap: 4px; opacity: 0; transition: opacity .15s; z-index: 1; }
@@ -162,6 +167,10 @@
     </div>
   </nav>
   <main>
+    <div class="hero">
+      <h1>Paris Product Events</h1>
+      <p>Meetups, conférences, podcasts et replays sur le Product Management, l'IA et le Product Design — à Paris et en ligne.</p>
+    </div>
     <div class="topbar">
       <div class="search-wrap">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -267,8 +276,8 @@
 
 <script>
 const TYPES = {
-  meetup_physique: { label:"Meetup en physique", icon:"📍", color:"#26215C", bg:"#EEEDFE", cta:"S'inscrire", calendar:true  },
   meetup_ligne:    { label:"Meetup en ligne",     icon:"💻", color:"#042C53", bg:"#E6F1FB", cta:"S'inscrire", calendar:true  },
+  meetup_physique: { label:"Meetup en physique", icon:"📍", color:"#26215C", bg:"#EEEDFE", cta:"S'inscrire", calendar:true  },
   conference:      { label:"Conférence",          icon:"🎤", color:"#4B1528", bg:"#FBEAF0", cta:"S'inscrire", calendar:true  },
   podcast:         { label:"Podcast",             icon:"🎧", color:"#4A1B0C", bg:"#FAECE7", cta:"Écouter",    calendar:false },
   replay:          { label:"Replay",              icon:"▶️", color:"#085041", bg:"#E1F5EE", cta:"Regarder",   calendar:false }
@@ -307,7 +316,7 @@ const DEFAULT_EVENTS = [
   { id:"41", type:"meetup_ligne", title:"AI @ Alan : scaler un produit IA pour 800k users", date:"7 juillet 2026, 12h00", dateISO:"2026-07-07", loc:"En ligne", desc:"Antoine Lizée (Head of Health AI chez Alan) présente Mo, compagnon santé propulsé par l'IA : validation scientifique, démo produit, human-in-the-loop et sécurité médicale à l'échelle de 800 000 utilisateurs. Session mensuelle de la communauté The Product Crew.", url:"https://www.meetup.com/fr-fr/theproductcrew/events/315424885/", themes:["pm","ia"] },
   { id:"42", type:"meetup_ligne", title:"The Product Crew (TPC)", date:"Agenda récurrent — à vérifier sur Meetup", dateISO:"", loc:"En ligne (sessions fréquentes)", desc:"Communauté produit organisant des sessions en ligne fréquentes avec des retours d'expérience concrets de praticiens produit et IA.", url:"https://www.meetup.com/fr-fr/theproductcrew/", themes:["pm","ia"] },
   { id:"52", type:"meetup_ligne", title:"Le Grand Rattrapage — toute la semaine (5 midis IA)", date:"6-10 juillet 2026, sessions de midi", dateISO:"2026-07-06", loc:"En ligne", desc:"« Cahier de vacances IA » en 5 sessions quotidiennes par Converteo x Le Ticket : agent de veille concurrentielle avec Claude, prototypage Claude/Lovable, analyse d'appels et de feedbacks par IA, orchestration d'agents Claude + Dust, et construction d'un Personal OS.", url:"https://luma.com/7zv7lz20", themes:["ia","pm"] },
-  { id:"43", type:"meetup_physique", title:"Generative AI Paris @WeScale", date:"7 juillet 2026, 18h30", dateISO:"2026-07-07", loc:"WeScale, 34 bd Haussmann, 75009 Paris", desc:"Soirée talks + cocktail (~150 participants) de la communauté Generative AI Paris, autour de l'IA générative appliquée au produit et à la tech.", url:"https://www.meetup.com/generative-ai-paris/", themes:["ia"] },
+  { id:"43", type:"meetup_physique", title:"Generative AI Paris @WeScale", date:"7 juillet 2026, 18h30", dateISO:"2026-07-07", loc:"WeScale, 34 bd Haussmann, 75009 Paris", desc:"Soirée talks + cocktail (~150 participants) de la communauté Generative AI Paris, autour de l'IA générative appliquée au produit et à la tech.", url:"https://www.meetup.com/fr-fr/generative-ai-paris/events/315380148/", themes:["ia"] },
   { id:"44", type:"meetup_ligne", title:"TPC — Quand le Design System devient le produit", date:"16 juillet 2026, 12h00", dateISO:"2026-07-16", loc:"En ligne", desc:"Maxime Podgorski partage un retour d'expérience sur la transformation d'un design system en produit à part entière. Session en ligne de la communauté The Product Crew.", url:"https://www.meetup.com/fr-FR/theproductcrew/events/315514583/", themes:["design","pm"] },
   { id:"45", type:"meetup_physique", title:"Generative AI Paris (groupe)", date:"Agenda récurrent — à vérifier sur Meetup", dateISO:"", loc:"Paris (lieu variable)", desc:"Communauté Product & Tech autour de l'IA générative (6 100+ membres) — talks et networking.", url:"https://www.meetup.com/generative-ai-paris/", themes:["ia"] },
   { id:"46", type:"meetup_ligne", title:"Le Live Yeita (collectif produit)", date:"Agenda récurrent — à vérifier sur Meetup", dateISO:"", loc:"En ligne", desc:"Format live récurrent du collectif produit Yeita : retours d'expérience et débats sur le product management et le product design.", url:"https://www.meetup.com/fr-fr/meetup-group-rotidemamieyeita/", themes:["pm","design"] },
@@ -346,12 +355,23 @@ const DEFAULT_EVENTS = [
   { id:"59", type:"replay", title:"Comment Contentsquare accélère l'adoption de son produit avec l'IA", date:"31 mai 2025", dateISO:"2025-05-31", loc:"Le Ticket — Pierre de Sercey (Contentsquare)", desc:"Comment Contentsquare utilise l'IA pour accélérer l'usage et l'adoption de son produit.", url:"https://www.le-ticket.fr/comment-contentsquare-accelere-lusage-et-ladoption-de-son-produit-avec-lia/147141/", themes:["ia","pm"] }
 ];
 
-const SK = "jb_paris_product_events_v9";
+const SK = "jb_paris_product_events_v10";
+const ADMIN_KEY = "jb_ppe_admin";
+const FAV_KEY = "jb_ppe_favorites";
+const isAdmin = (() => {
+  if (new URLSearchParams(location.search).get('admin') === '1') localStorage.setItem(ADMIN_KEY, '1');
+  return localStorage.getItem(ADMIN_KEY) === '1';
+})();
 function loadState() {
   try { const s = localStorage.getItem(SK); if (s) return JSON.parse(s); } catch(e) {}
-  return { events: DEFAULT_EVENTS, favorites: [] };
+  return { events: DEFAULT_EVENTS };
 }
 function saveState() { localStorage.setItem(SK, JSON.stringify(state)); }
+function loadFavorites() {
+  try { const s = sessionStorage.getItem(FAV_KEY); if (s) return JSON.parse(s); } catch(e) {}
+  return [];
+}
+function saveFavorites() { sessionStorage.setItem(FAV_KEY, JSON.stringify(favorites)); }
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,5); }
 function toISO(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 function isWithinLastYear(dateISO) {
@@ -378,7 +398,7 @@ function titleFromUrl(url) {
 }
 
 let state = loadState();
-if (!state.favorites) state.favorites = [];
+let favorites = loadFavorites();
 let activeType = "all";
 let activeTheme = "all";
 let searchQ = "";
@@ -442,7 +462,7 @@ function getFiltered() {
     const mt = activeType==="all"||p.type===activeType;
     const mth = activeTheme==="all"||(p.themes||[]).includes(activeTheme);
     const ms = !searchQ||p.title.toLowerCase().includes(searchQ)||(p.desc||"").toLowerCase().includes(searchQ)||(p.loc||"").toLowerCase().includes(searchQ);
-    const mf = !showFavOnly || state.favorites.includes(p.id);
+    const mf = !showFavOnly || favorites.includes(p.id);
     return mt && mth && ms && mf;
   });
 }
@@ -450,10 +470,10 @@ function getFiltered() {
 function cardEl(p) {
   const tcfg = TYPES[p.type] || TYPES.meetup_physique;
   const card = document.createElement("div");
-  card.className = "card";
+  card.className = "card" + (p.type==="podcast" ? " no-click" : "");
   const themeBadges = (p.themes||[]).map(t=>{ const c=THEMES[t]||{}; return `<span class="badge-neutral">${c.label||t}</span>`; }).join("");
   const isPodcast = p.type === "podcast";
-  const isFav = state.favorites.includes(p.id);
+  const isFav = favorites.includes(p.id);
   card.innerHTML = `
     <div class="card-actions">
       ${isPodcast ? `<button class="card-icon-btn${isFav?' is-fav':''}" data-act="fav" data-id="${p.id}" title="${isFav?'Retirer des favoris':'Ajouter aux favoris'}"><svg viewBox="0 0 24 24" fill="${isFav?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>` : ""}
@@ -478,10 +498,12 @@ function cardEl(p) {
       else if (act === "share") shareItem(p);
     });
   });
-  card.addEventListener("click", e => {
-    if (e.target.closest('[data-act]') || e.target.closest('.card-cta')) return;
-    openWebview(p);
-  });
+  if (!isPodcast) {
+    card.addEventListener("click", e => {
+      if (e.target.closest('[data-act]') || e.target.closest('.card-cta')) return;
+      openWebview(p);
+    });
+  }
   return card;
 }
 
@@ -492,9 +514,9 @@ function cardsInto(container, list, emptyMsg) {
 }
 
 function toggleFavorite(id) {
-  const i = state.favorites.indexOf(id);
-  if (i>-1) state.favorites.splice(i,1); else state.favorites.push(id);
-  saveState(); render();
+  const i = favorites.indexOf(id);
+  if (i>-1) favorites.splice(i,1); else favorites.push(id);
+  saveFavorites(); render();
 }
 
 async function shareItem(p) {
@@ -553,7 +575,7 @@ function renderListView(view, list, title) {
 }
 
 function renderPodcastView(view, list) {
-  const favCount = state.favorites.filter(id => state.events.find(e=>e.id===id && e.type==="podcast")).length;
+  const favCount = favorites.filter(id => state.events.find(e=>e.id===id && e.type==="podcast")).length;
   view.innerHTML = `
     <div class="favorites-block">
       <div class="favorites-head">⭐ Les 5 podcasts favoris du Product Manager</div>
@@ -671,7 +693,7 @@ function openModal(id) {
   document.getElementById("f-loc").value   = p?.loc||"";
   document.getElementById("f-desc").value  = p?.desc||"";
   document.getElementById("f-url").value   = p?.url||"";
-  document.getElementById("btn-delete").style.display = p?"block":"none";
+  document.getElementById("btn-delete").style.display = (p && isAdmin) ? "block" : "none";
   selectedThemes = [...(p?.themes||[])];
   renderChips();
   document.getElementById("overlay").classList.add("open");
@@ -702,7 +724,7 @@ document.getElementById("btn-save").addEventListener("click", ()=>{
 });
 
 document.getElementById("btn-delete").addEventListener("click", ()=>{
-  if (!editingId||!confirm("Supprimer cet événement ?")) return;
+  if (!isAdmin||!editingId||!confirm("Supprimer cet événement ?")) return;
   state.events = state.events.filter(p=>p.id!==editingId);
   saveState(); buildNav(); render(); closeModal();
 });
@@ -718,12 +740,14 @@ document.getElementById("btn-new").addEventListener("click", ()=>{
 document.getElementById("add-close").addEventListener("click", ()=>document.getElementById("overlay-add").classList.remove("open"));
 document.getElementById("overlay-add").addEventListener("click", e=>{ if(e.target===e.currentTarget) document.getElementById("overlay-add").classList.remove("open"); });
 document.getElementById("btn-quick-save").addEventListener("click", ()=>{
-  const url = document.getElementById("f-quick-url").value.trim();
-  if (!url) { document.getElementById("f-quick-url").focus(); return; }
+  let url = document.getElementById("f-quick-url").value.trim();
+  if (!url) { document.getElementById("f-quick-url").focus(); toast("Colle un lien avant d'ajouter."); return; }
+  if (!/^https?:\/\//i.test(url)) url = "https://" + url;
   const data = { id:uid(), title:titleFromUrl(url), type:"meetup_physique", date:"", dateISO:"", loc:"", desc:"", url, themes:[] };
   state.events = [data, ...state.events];
   saveState(); buildNav(); render();
   document.getElementById("overlay-add").classList.remove("open");
+  toast("Contenu ajouté ✓");
 });
 document.getElementById("f-quick-url").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); document.getElementById("btn-quick-save").click(); } });
 
