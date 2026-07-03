@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Paris Product Events — Meetups, Webinars, Podcasts &amp; Replays</title>
+  <title>Paris Product Events — Meetups, Conférences, Webinars, Podcasts &amp; Replays</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -71,10 +71,48 @@
     .card-loc { font-size: 11px; color: var(--text3); display: flex; align-items: center; gap: 4px; }
     .card-desc { font-size: 12px; color: var(--text2); line-height: 1.6; flex: 1; }
     .card-footer { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
-    .badge { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 99px; }
+    .badge-neutral { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 99px; background: var(--surface2); color: var(--text2); }
     .card-cta { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; padding: 8px 12px; border-radius: var(--rs); background: var(--surface2); color: var(--text1); text-decoration: none; margin-top: 2px; transition: background .12s; }
     .card-cta:hover { background: var(--accent); color: #fff; }
-    .empty { grid-column: 1/-1; text-align: center; padding: 4rem 2rem; color: var(--text3); font-size: 14px; }
+    .empty { grid-column: 1/-1; text-align: center; padding: 3rem 2rem; color: var(--text3); font-size: 14px; }
+
+    /* Calendar */
+    .cal-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+    .cal-nav { display: flex; align-items: center; gap: 8px; }
+    .cal-nav button { width: 30px; height: 30px; border-radius: 8px; border: 0.5px solid var(--border-md); background: var(--surface); cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text2); }
+    .cal-nav button:hover { background: var(--surface2); }
+    .cal-nav svg { width: 14px; height: 14px; }
+    .cal-title { font-size: 15px; font-weight: 600; text-transform: capitalize; min-width: 150px; text-align: center; }
+    .btn-today { font-size: 12px; padding: 6px 12px; border-radius: var(--rs); border: 0.5px solid var(--border-md); background: var(--surface); cursor: pointer; color: var(--text2); }
+    .btn-today:hover { background: var(--surface2); }
+
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 1.75rem; }
+    .cal-weekday { font-size: 10px; font-weight: 600; color: var(--text3); text-transform: uppercase; text-align: center; padding-bottom: 4px; }
+    .cal-day { min-height: 72px; border-radius: 10px; border: 0.5px solid var(--border); background: var(--surface); padding: 6px; cursor: pointer; display: flex; flex-direction: column; gap: 4px; transition: border-color .12s, background .12s; }
+    .cal-day:hover { border-color: var(--border-md); }
+    .cal-day.out { opacity: .35; }
+    .cal-day.today .cal-daynum { color: var(--accent); font-weight: 700; }
+    .cal-day.selected { background: var(--accent-bg); border-color: var(--accent); }
+    .cal-daynum { font-size: 11px; color: var(--text2); font-weight: 500; }
+    .cal-dots { display: flex; flex-wrap: wrap; gap: 3px; }
+    .cal-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .cal-more { font-size: 9px; color: var(--text3); }
+
+    .subsection { margin-top: 1.75rem; }
+    .subsection-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: .9rem; }
+    .subsection-head h3 { font-size: 13px; font-weight: 600; color: var(--text2); }
+    .subsection-head span { font-size: 11px; color: var(--text3); }
+    .chip-reset { font-size: 11px; color: var(--accent); background: none; border: none; cursor: pointer; font-weight: 500; }
+    .recur-list { display: flex; flex-direction: column; gap: 8px; }
+    .recur-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--rs); border: 0.5px solid var(--border); background: var(--surface); }
+    .recur-item .type-badge { flex-shrink: 0; }
+    .recur-item-body { flex: 1; min-width: 0; }
+    .recur-item-title { font-size: 13px; font-weight: 500; }
+    .recur-item-loc { font-size: 11px; color: var(--text3); margin-top: 1px; }
+    .recur-item a { font-size: 12px; color: var(--accent); text-decoration: none; font-weight: 500; white-space: nowrap; flex-shrink: 0; }
+    .recur-item a:hover { text-decoration: underline; }
+    .recur-item-edit { width: 24px; height: 24px; border-radius: 6px; background: var(--surface2); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text2); flex-shrink: 0; }
+    .recur-item-edit svg { width: 11px; height: 11px; }
 
     .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.38); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 1rem; opacity: 0; pointer-events: none; transition: opacity .18s; }
     .overlay.open { opacity: 1; pointer-events: all; }
@@ -90,6 +128,7 @@
     .field input, .field textarea, .field select { padding: 9px 11px; font-size: 13px; border: 0.5px solid var(--border-md); border-radius: var(--rs); background: var(--surface2); color: var(--text1); outline: none; font-family: inherit; resize: none; transition: border-color .15s; }
     .field input:focus, .field textarea:focus, .field select:focus { border-color: var(--accent); background: var(--surface); }
     .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .field-hint { font-size: 10px; color: var(--text3); }
 
     .tags-wrap { display: flex; gap: 7px; flex-wrap: wrap; }
     .tag-chip { display: flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 99px; font-size: 12px; font-weight: 500; border: 0.5px solid var(--border-md); background: var(--surface2); color: var(--text2); cursor: pointer; transition: all .12s; user-select: none; }
@@ -107,7 +146,7 @@
   <nav id="nav">
     <div class="nav-brand">
       <div class="nav-av">📅</div>
-      <div><div class="nav-name">Paris Product Events</div><div class="nav-sub">Meetups · Webinars · Podcasts</div></div>
+      <div><div class="nav-name">Paris Product Events</div><div class="nav-sub">Meetups · Conf. · Webinars · Podcasts</div></div>
     </div>
   </nav>
   <main>
@@ -122,8 +161,7 @@
         Ajouter
       </button>
     </div>
-    <div class="section-head"><h2 id="sec-title">Tous les événements</h2><span id="sec-count"></span></div>
-    <div class="grid" id="grid"></div>
+    <div id="view"></div>
   </main>
 </div>
 
@@ -139,19 +177,19 @@
       <label>Titre</label>
       <input id="f-title" type="text" placeholder="Nom de l'événement / épisode" />
     </div>
+    <div class="field">
+      <label>Type</label>
+      <select id="f-type"></select>
+    </div>
     <div class="field-row">
       <div class="field">
-        <label>Type</label>
-        <select id="f-type">
-          <option value="meetup">Meetup</option>
-          <option value="webinar">Webinar</option>
-          <option value="podcast">Podcast</option>
-          <option value="replay">Replay</option>
-        </select>
+        <label>Date affichée</label>
+        <input id="f-date" type="text" placeholder="ex: 24 sept. 2026, 19h ou Récurrent" />
       </div>
       <div class="field">
-        <label>Date</label>
-        <input id="f-date" type="text" placeholder="ex: 24 sept. 2026 ou Récurrent" />
+        <label>Date calendrier</label>
+        <input id="f-dateiso" type="date" />
+        <span class="field-hint">Laisser vide si récurrent / sans date fixe</span>
       </div>
     </div>
     <div class="field">
@@ -179,57 +217,69 @@
 
 <script>
 const TYPES = {
-  meetup:  { label:"Meetup",  color:"#26215C", bg:"#EEEDFE", cta:"S'inscrire" },
-  webinar: { label:"Webinar", color:"#042C53", bg:"#E6F1FB", cta:"S'inscrire" },
-  podcast: { label:"Podcast", color:"#4A1B0C", bg:"#FAECE7", cta:"Écouter" },
-  replay:  { label:"Replay",  color:"#085041", bg:"#E1F5EE", cta:"Regarder" }
+  meetup:     { label:"Meetup",     color:"#26215C", bg:"#EEEDFE", cta:"S'inscrire",      calendar:true  },
+  conference: { label:"Conférence", color:"#4B1528", bg:"#FBEAF0", cta:"S'inscrire",      calendar:true  },
+  webinar:    { label:"Webinar",    color:"#042C53", bg:"#E6F1FB", cta:"S'inscrire",      calendar:true  },
+  formation:  { label:"Formation",  color:"#27500A", bg:"#EAF3DE", cta:"Voir la formation", calendar:true },
+  podcast:    { label:"Podcast",    color:"#4A1B0C", bg:"#FAECE7", cta:"Écouter",         calendar:false },
+  replay:     { label:"Replay",     color:"#085041", bg:"#E1F5EE", cta:"Regarder",        calendar:false }
 };
 const THEMES = {
-  pm:     { label:"Product Management", color:"#26215C", bg:"#EEEDFE", dot:"#534AB7" },
-  ia:     { label:"IA",                 color:"#4B1528", bg:"#FBEAF0", dot:"#D4537E" },
-  design: { label:"Product Design",     color:"#633806", bg:"#FAEEDA", dot:"#BA7517" }
+  pm:     { label:"Product Management", dot:"#534AB7" },
+  ia:     { label:"IA",                 dot:"#D4537E" },
+  design: { label:"Product Design",     dot:"#BA7517" }
 };
+const CAL_TYPES = Object.keys(TYPES).filter(k=>TYPES[k].calendar);
+const WEEKDAYS = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
 
 const DEFAULT_EVENTS = [
-  { id:"1", type:"meetup", title:"ProductTank Paris — Designing for Adoption: Turning AI Strategy Into Live Value", date:"24 septembre 2026, 19h00", loc:"5 Degrés Paris, 12 rue de la Bourse, 75002 Paris", desc:"Kevin Stewart (Format-3) présente un cadre pour transformer une stratégie IA en valeur concrète ; retour d'expérience de transformation IA par l'équipe de 5 Degrés. Format bilingue, suivi d'un apéro networking.", url:"https://www.meetup.com/producttank-paris/", themes:["pm","ia"] },
-  { id:"2", type:"meetup", title:"La Conf — School of Product Paris", date:"17 novembre 2026", loc:"Pavillon Chesnaie du Roy, 75012 Paris", desc:"Événement phare annuel de School of Product Paris, format conférence élargi au-delà des ateliers habituels en petits groupes.", url:"https://www.meetup.com/fr-fr/school_of_product/", themes:["pm","design"] },
-  { id:"3", type:"meetup", title:"ProductTank Paris (groupe)", date:"Agenda récurrent — à vérifier sur Meetup", loc:"Paris", desc:"Meetup produit de référence à Paris : talks d'invités sur le product management, le product design et l'UX, suivis d'un networking.", url:"https://www.meetup.com/producttank-paris/", themes:["pm","design"] },
-  { id:"4", type:"meetup", title:"Product Faculty Paris", date:"Agenda récurrent — à vérifier sur Meetup", loc:"Paris", desc:"Série d'événements pour connecter la communauté produit parisienne : metrics, stratégie produit, growth, UX for PMs, continuous discovery.", url:"https://www.meetup.com/product-faculty-paris/", themes:["pm"] },
-  { id:"5", type:"meetup", title:"FrenchProduit Paris (ex-LPCx Paris)", date:"Agenda récurrent — à vérifier sur Meetup", loc:"Paris", desc:"Communauté active de passionnés de création produit (PM, PO, designers, marketers, ops) — 78 événements organisés à ce jour, sujets récents : stratégie IA, onboarding à l'ère agentique.", url:"https://www.meetup.com/laproductconf-x/", themes:["pm","ia"] },
-  { id:"6", type:"meetup", title:"DesignOps Meetup Paris", date:"Agenda récurrent — à vérifier sur Meetup", loc:"58 bis rue de la Chaussée d'Antin, Paris", desc:"Rencontres sur les pratiques DesignOps, avec des intervenants qui partagent des retours d'expérience concrets.", url:"https://www.meetup.com/fr-fr/designops-meetup/", themes:["design"] },
-  { id:"7", type:"meetup", title:"AI Tinkerers Paris", date:"Agenda récurrent — à vérifier sur le site", loc:"Paris (lieu variable)", desc:"Communauté de builders IA (agents, RAG, multimodal, coding tools) — démos techniques live, pas de pitchs commerciaux.", url:"https://paris.aitinkerers.org/", themes:["ia"] },
-  { id:"8", type:"meetup", title:"Global AI Paris", date:"Agenda récurrent — à vérifier sur Meetup", loc:"Paris (lieu variable)", desc:"Rencontres autour de l'actualité IA et du networking, au sein du réseau international Global AI Community.", url:"https://www.meetup.com/fr-fr/global-ai-paris/", themes:["ia"] },
-  { id:"9", type:"meetup", title:"Star d'UX .Paris", date:"Agenda récurrent — à vérifier sur Meetup", loc:"Paris", desc:"Communauté des professionnels UX de Paris : soirées thématiques avec deux experts invités, suivies de networking.", url:"https://www.meetup.com/star-dux/", themes:["design"] },
-  { id:"10", type:"meetup", title:"School of Product Paris (ateliers réguliers)", date:"Agenda récurrent — à vérifier sur Meetup", loc:"Paris, souvent chez OCTO Technology", desc:"Ateliers en petits groupes (30 personnes max) : 20-30 min de théorie suivis d'exercices pratiques, puis apéro networking.", url:"https://www.meetup.com/fr-fr/school_of_product/", themes:["pm","design"] },
-  { id:"11", type:"meetup", title:"Design Systems France (Paris)", date:"Agenda récurrent — à vérifier sur Meetup", loc:"Paris", desc:"Communauté dédiée aux « builders » de Design Systems dans l'écosystème français — ateliers et talks.", url:"https://www.meetup.com/designsystemsfrance-paris/", themes:["design"] },
+  { id:"1", type:"meetup", title:"ProductTank Paris — Designing for Adoption: Turning AI Strategy Into Live Value", date:"24 septembre 2026, 19h00", dateISO:"2026-09-24", loc:"5 Degrés Paris, 12 rue de la Bourse, 75002 Paris", desc:"Kevin Stewart (Format-3) présente un cadre pour transformer une stratégie IA en valeur concrète ; retour d'expérience de transformation IA par l'équipe de 5 Degrés. Format bilingue, suivi d'un apéro networking.", url:"https://www.meetup.com/producttank-paris/", themes:["pm","ia"] },
+  { id:"2", type:"conference", title:"La Conf — School of Product Paris", date:"17 novembre 2026", dateISO:"2026-11-17", loc:"Pavillon Chesnaie du Roy, 75012 Paris", desc:"Événement phare annuel de School of Product Paris, format conférence élargi au-delà des ateliers habituels en petits groupes.", url:"https://www.meetup.com/fr-fr/school_of_product/", themes:["pm","design"] },
+  { id:"3", type:"meetup", title:"ProductTank Paris (groupe)", date:"Agenda récurrent — à vérifier sur Meetup", dateISO:"", loc:"Paris", desc:"Meetup produit de référence à Paris : talks d'invités sur le product management, le product design et l'UX, suivis d'un networking.", url:"https://www.meetup.com/producttank-paris/", themes:["pm","design"] },
+  { id:"4", type:"meetup", title:"Product Faculty Paris", date:"Agenda récurrent — à vérifier sur Meetup", dateISO:"", loc:"Paris", desc:"Série d'événements pour connecter la communauté produit parisienne : metrics, stratégie produit, growth, UX for PMs, continuous discovery.", url:"https://www.meetup.com/product-faculty-paris/", themes:["pm"] },
+  { id:"5", type:"meetup", title:"FrenchProduit Paris (ex-LPCx Paris)", date:"Agenda récurrent — à vérifier sur Meetup", dateISO:"", loc:"Paris", desc:"Communauté active de passionnés de création produit (PM, PO, designers, marketers, ops) — 78 événements organisés à ce jour, sujets récents : stratégie IA, onboarding à l'ère agentique.", url:"https://www.meetup.com/laproductconf-x/", themes:["pm","ia"] },
+  { id:"6", type:"meetup", title:"DesignOps Meetup Paris", date:"Agenda récurrent — à vérifier sur Meetup", dateISO:"", loc:"58 bis rue de la Chaussée d'Antin, Paris", desc:"Rencontres sur les pratiques DesignOps, avec des intervenants qui partagent des retours d'expérience concrets.", url:"https://www.meetup.com/fr-fr/designops-meetup/", themes:["design"] },
+  { id:"7", type:"meetup", title:"AI Tinkerers Paris", date:"Agenda récurrent — à vérifier sur le site", dateISO:"", loc:"Paris (lieu variable)", desc:"Communauté de builders IA (agents, RAG, multimodal, coding tools) — démos techniques live, pas de pitchs commerciaux.", url:"https://paris.aitinkerers.org/", themes:["ia"] },
+  { id:"8", type:"meetup", title:"Global AI Paris", date:"Agenda récurrent — à vérifier sur Meetup", dateISO:"", loc:"Paris (lieu variable)", desc:"Rencontres autour de l'actualité IA et du networking, au sein du réseau international Global AI Community.", url:"https://www.meetup.com/fr-fr/global-ai-paris/", themes:["ia"] },
+  { id:"9", type:"meetup", title:"Star d'UX .Paris", date:"Agenda récurrent — à vérifier sur Meetup", dateISO:"", loc:"Paris", desc:"Communauté des professionnels UX de Paris : soirées thématiques avec deux experts invités, suivies de networking.", url:"https://www.meetup.com/star-dux/", themes:["design"] },
+  { id:"10", type:"meetup", title:"School of Product Paris (ateliers réguliers)", date:"Agenda récurrent — à vérifier sur Meetup", dateISO:"", loc:"Paris, souvent chez OCTO Technology", desc:"Ateliers en petits groupes (30 personnes max) : 20-30 min de théorie suivis d'exercices pratiques, puis apéro networking.", url:"https://www.meetup.com/fr-fr/school_of_product/", themes:["pm","design"] },
+  { id:"11", type:"meetup", title:"Design Systems France (Paris)", date:"Agenda récurrent — à vérifier sur Meetup", dateISO:"", loc:"Paris", desc:"Communauté dédiée aux « builders » de Design Systems dans l'écosystème français — ateliers et talks.", url:"https://www.meetup.com/designsystemsfrance-paris/", themes:["design"] },
 
-  { id:"12", type:"webinar", title:"OCTO Academy — Devenir Product Manager", date:"Sessions récurrentes", loc:"Paris / à distance", desc:"Formation professionnelle sur le rôle de Product Manager, catalogue Product & Design d'OCTO Academy.", url:"https://www.octo.academy/catalogue/domaine/product-management/", themes:["pm"] },
-  { id:"13", type:"webinar", title:"Ironhack — AI Product Manager", date:"Sessions récurrentes, à distance", loc:"En ligne", desc:"Formation Product Manager orientée IA, à distance, avec accélérateur associant des startups partenaires.", url:"https://www.ironhack.com/fr/product-manager-ia/a-distance", themes:["pm","ia"] },
+  { id:"12", type:"formation", title:"OCTO Academy — Devenir Product Manager", date:"Sessions récurrentes", dateISO:"", loc:"Paris / à distance", desc:"Formation professionnelle sur le rôle de Product Manager, catalogue Product & Design d'OCTO Academy.", url:"https://www.octo.academy/catalogue/domaine/product-management/", themes:["pm"] },
+  { id:"13", type:"formation", title:"Ironhack — AI Product Manager", date:"Sessions récurrentes, à distance", dateISO:"", loc:"En ligne", desc:"Formation Product Manager orientée IA, à distance, avec accélérateur associant des startups partenaires.", url:"https://www.ironhack.com/fr/product-manager-ia/a-distance", themes:["pm","ia"] },
 
-  { id:"14", type:"podcast", title:"Dans la tête d'un PM — #7 Maïa Metz", date:"", loc:"Podcast — Thomas de Phuoc", desc:"Maïa Metz (BlaBlaCar, Aircall, fondatrice de Noé) raconte son parcours et sa façon de penser le produit.", url:"https://danslatetedunpm.substack.com/p/dans-la-tte-dun-pm-7-maa-metz-no", themes:["pm"] },
-  { id:"15", type:"podcast", title:"Product Squad — #43 20 ans de Product Management en France", date:"", loc:"Podcast — Axel Sooriah", desc:"Hugo Geissmann (Thiga) retrace l'évolution du métier de Product Manager en France sur deux décennies.", url:"https://open.spotify.com/show/4l3b5KXs07S5Yqp92OPxQv", themes:["pm"] },
-  { id:"16", type:"podcast", title:"Clef de voûte — 10 prédictions Product pour 2026", date:"", loc:"Podcast — Timothé Frin (Stellar)", desc:"Anticipe l'impact de l'IA sur le métier de PM et la fin annoncée du pricing par utilisateur.", url:"https://open.spotify.com/episode/3n8esULfXw9TkT3oWWv7dZ", themes:["pm","ia"] },
-  { id:"17", type:"podcast", title:"Parlons Design — #416 J'ai testé Claude Design", date:"", loc:"Podcast — Romain Penchenat", desc:"Romain Penchenat teste Claude Design et discute de son impact sur le métier de Product Designer.", url:"https://parlonsdesign.substack.com/p/416-jai-teste-claude-design-avis", themes:["design","ia"] },
-  { id:"18", type:"podcast", title:"Design+", date:"", loc:"Podcast", desc:"Podcast référence pour les designers UX/UI/Product : pratiques et conseils actionnables partagés par des pros.", url:"https://open.spotify.com/show/7jKE9V0OhhZNlkKAcYmuyY", themes:["design"] },
-  { id:"19", type:"podcast", title:"Salut les Designers !", date:"", loc:"Podcast — Agence LunaWeb", desc:"Podcast mensuel : tests UX, éco-conception, accessibilité, service design, avec un·e expert·e invité·e.", url:"https://podcasts.apple.com/fr/podcast/salut-les-designers/id1572173012", themes:["design"] },
-  { id:"20", type:"podcast", title:"Hymacast — #0042 Comprendre l'IA générative pour créer vos produits IA", date:"", loc:"Podcast — Hymaïa", desc:"Une Data Product Manager et un Lead Data Scientist d'Hymaïa décryptent l'IA générative appliquée à la construction produit.", url:"https://open.spotify.com/episode/5luYA9yqOBZUUdJqG6bIRH", themes:["ia","pm"] },
-  { id:"21", type:"podcast", title:"Lenny's Podcast — AI and product management", date:"", loc:"Podcast — Lenny Rachitsky (international)", desc:"Marily Nika (Meta, Google) sur la transformation du métier de Product Manager par l'IA. Référence internationale.", url:"https://open.spotify.com/episode/0bVVa8dQnvQXCu70oneMsr", themes:["pm","ia"] },
-  { id:"22", type:"podcast", title:"Comptoir IA", date:"", loc:"Podcast", desc:"Des professionnels de tous horizons racontent comment l'IA transforme concrètement leur métier.", url:"https://www.deezer.com/fr/episode/763779161", themes:["ia"] },
+  { id:"28", type:"webinar", title:"SVPG Product Masterclass", date:"7-9 juillet 2026, 8h-13h PDT (~17h-22h Paris)", dateISO:"2026-07-07", loc:"En ligne (Zoom) — Silicon Valley Product Group", desc:"Cours interactif de 3 jours sur les fondamentaux du product management moderne : stratégie, découverte produit, et impact de l'IA générative sur le métier de PM.", url:"https://www.eventbrite.com/e/svpg-product-masterclass-tickets-1989265821622", themes:["pm","ia"] },
+  { id:"29", type:"webinar", title:"Agent Analytics — Stop Measuring AI Activity. Start Measuring AI Impact.", date:"15 juillet 2026", dateISO:"2026-07-15", loc:"En ligne — Amplitude", desc:"Amplitude présente « Agent Analytics », qui relie la qualité des agents IA aux métriques de conversion, rétention et revenu.", url:"https://amplitude.com/events", themes:["ia","pm"] },
+  { id:"30", type:"webinar", title:"The Long Game of Enterprise UX: Research, Change, Adoption", date:"8 juillet 2026, ~18h Paris (Webinar Wednesdays)", dateISO:"2026-07-08", loc:"En ligne — UXPA International", desc:"Stéphanie Walter (Maltem Consulting) partage son retour d'expérience sur le redesign d'outils d'entreprise complexes : recherche utilisateur, conduite du changement et adoption.", url:"https://uxpa.zoom.us/webinar/register/WN_VBi7V55SQQyEnRsJTxV0tw", themes:["design"] },
+  { id:"31", type:"webinar", title:"Vibe Coding Is Changing the Game — Are Product Leaders Ready for It?", date:"23 juillet 2026", dateISO:"2026-07-23", loc:"En ligne — Pragmatic Institute", desc:"Comment l'IA générative réduit la distance entre l'idée et l'exécution produit, et ce que ça implique pour les leaders produit.", url:"https://www.pragmaticinstitute.com/resources/pi-events/vibe-coding-is-changing-the-game-are-product-leaders-ready-for-it/", themes:["pm","ia"] },
+  { id:"32", type:"webinar", title:"Q2 2026 Product Roundup", date:"23 juillet 2026, ~17h Paris — lien à revérifier avant inscription", dateISO:"2026-07-23", loc:"En ligne — communauté HubSpot", desc:"Tour d'horizon des sorties produit du T2 2026 chez HubSpot, incluant de nouvelles capacités IA et fonctionnalités CRM.", url:"https://community.hubspot.com/t/july-23-q2-2026-product-roundup-with-kyle-jepson-and-aaron-schmaltz/151890", themes:["pm","ia"] },
+  { id:"33", type:"webinar", title:"AI Builder Week", date:"3 août 2026", dateISO:"2026-08-03", loc:"En ligne — Product School", desc:"Série d'événements où Product School réunit des leaders produit spécialisés en IA issus de grandes entreprises tech.", url:"https://events.ringcentral.com/events/ai-builder-week/registration", themes:["ia","pm"] },
 
-  { id:"23", type:"replay", title:"La Product Conf Paris 2025 — Playlist complète", date:"Mai 2025", loc:"Folies Bergère, Paris", desc:"Tous les talks de l'édition 2025 de la conférence produit francophone de référence.", url:"https://www.youtube.com/playlist?list=PLBaIQg089w73T-j1kXpCGnWiFGtEu-u4m", themes:["pm"] },
-  { id:"24", type:"replay", title:"La Product Conf Paris 2025 — Retour en images", date:"Mai 2025", loc:"Paris", desc:"Vidéo récap de l'édition 2025 de La Product Conf Paris.", url:"https://www.youtube.com/watch?v=bdaMQNkGLOI", themes:["pm"] },
-  { id:"25", type:"replay", title:"ProductTank Paris — Chaîne YouTube", date:"En continu", loc:"Paris", desc:"Tous les replays des talks présentés lors des meetups ProductTank Paris.", url:"https://www.youtube.com/channel/UC3CQ4bHE1-0QUUQWAXGJDwg", themes:["pm","design"] },
-  { id:"26", type:"replay", title:"AI Product Day 2025 — Playlist complète", date:"Mars 2025", loc:"Paris — organisé par Hymaïa", desc:"Talks de la première conférence française dédiée aux équipes produit qui veulent exploiter le potentiel de l'IA.", url:"https://www.youtube.com/playlist?list=PL_h6mFCmTXr-vxhjm7thHy8x9nyAEE7Lf", themes:["ia","pm"] },
-  { id:"27", type:"replay", title:"ProductTank Barcelona — AI Edition", date:"", loc:"Barcelone (référence proche)", desc:"Édition spéciale IA de ProductTank, référence pour approfondir le sujet IA x Produit.", url:"https://www.youtube.com/watch?v=0qBRlphuGTA", themes:["ia","pm"] }
+  { id:"14", type:"podcast", title:"Dans la tête d'un PM — #7 Maïa Metz", date:"", dateISO:"", loc:"Podcast — Thomas de Phuoc", desc:"Maïa Metz (BlaBlaCar, Aircall, fondatrice de Noé) raconte son parcours et sa façon de penser le produit.", url:"https://danslatetedunpm.substack.com/p/dans-la-tte-dun-pm-7-maa-metz-no", themes:["pm"] },
+  { id:"15", type:"podcast", title:"Product Squad — #43 20 ans de Product Management en France", date:"", dateISO:"", loc:"Podcast — Axel Sooriah", desc:"Hugo Geissmann (Thiga) retrace l'évolution du métier de Product Manager en France sur deux décennies.", url:"https://open.spotify.com/show/4l3b5KXs07S5Yqp92OPxQv", themes:["pm"] },
+  { id:"16", type:"podcast", title:"Clef de voûte — 10 prédictions Product pour 2026", date:"", dateISO:"", loc:"Podcast — Timothé Frin (Stellar)", desc:"Anticipe l'impact de l'IA sur le métier de PM et la fin annoncée du pricing par utilisateur.", url:"https://open.spotify.com/episode/3n8esULfXw9TkT3oWWv7dZ", themes:["pm","ia"] },
+  { id:"17", type:"podcast", title:"Parlons Design — #416 J'ai testé Claude Design", date:"", dateISO:"", loc:"Podcast — Romain Penchenat", desc:"Romain Penchenat teste Claude Design et discute de son impact sur le métier de Product Designer.", url:"https://parlonsdesign.substack.com/p/416-jai-teste-claude-design-avis", themes:["design","ia"] },
+  { id:"18", type:"podcast", title:"Design+", date:"", dateISO:"", loc:"Podcast", desc:"Podcast référence pour les designers UX/UI/Product : pratiques et conseils actionnables partagés par des pros.", url:"https://open.spotify.com/show/7jKE9V0OhhZNlkKAcYmuyY", themes:["design"] },
+  { id:"19", type:"podcast", title:"Salut les Designers !", date:"", dateISO:"", loc:"Podcast — Agence LunaWeb", desc:"Podcast mensuel : tests UX, éco-conception, accessibilité, service design, avec un·e expert·e invité·e.", url:"https://podcasts.apple.com/fr/podcast/salut-les-designers/id1572173012", themes:["design"] },
+  { id:"20", type:"podcast", title:"Hymacast — #0042 Comprendre l'IA générative pour créer vos produits IA", date:"", dateISO:"", loc:"Podcast — Hymaïa", desc:"Une Data Product Manager et un Lead Data Scientist d'Hymaïa décryptent l'IA générative appliquée à la construction produit.", url:"https://open.spotify.com/episode/5luYA9yqOBZUUdJqG6bIRH", themes:["ia","pm"] },
+  { id:"21", type:"podcast", title:"Lenny's Podcast — AI and product management", date:"", dateISO:"", loc:"Podcast — Lenny Rachitsky (international)", desc:"Marily Nika (Meta, Google) sur la transformation du métier de Product Manager par l'IA. Référence internationale.", url:"https://open.spotify.com/episode/0bVVa8dQnvQXCu70oneMsr", themes:["pm","ia"] },
+  { id:"22", type:"podcast", title:"Comptoir IA", date:"", dateISO:"", loc:"Podcast", desc:"Des professionnels de tous horizons racontent comment l'IA transforme concrètement leur métier.", url:"https://www.deezer.com/fr/episode/763779161", themes:["ia"] },
+
+  { id:"23", type:"replay", title:"La Product Conf Paris 2025 — Playlist complète", date:"Mai 2025", dateISO:"", loc:"Folies Bergère, Paris", desc:"Tous les talks de l'édition 2025 de la conférence produit francophone de référence.", url:"https://www.youtube.com/playlist?list=PLBaIQg089w73T-j1kXpCGnWiFGtEu-u4m", themes:["pm"] },
+  { id:"24", type:"replay", title:"La Product Conf Paris 2025 — Retour en images", date:"Mai 2025", dateISO:"", loc:"Paris", desc:"Vidéo récap de l'édition 2025 de La Product Conf Paris.", url:"https://www.youtube.com/watch?v=bdaMQNkGLOI", themes:["pm"] },
+  { id:"25", type:"replay", title:"ProductTank Paris — Chaîne YouTube", date:"En continu", dateISO:"", loc:"Paris", desc:"Tous les replays des talks présentés lors des meetups ProductTank Paris.", url:"https://www.youtube.com/channel/UC3CQ4bHE1-0QUUQWAXGJDwg", themes:["pm","design"] },
+  { id:"26", type:"replay", title:"AI Product Day 2025 — Playlist complète", date:"Mars 2025", dateISO:"", loc:"Paris — organisé par Hymaïa", desc:"Talks de la première conférence française dédiée aux équipes produit qui veulent exploiter le potentiel de l'IA.", url:"https://www.youtube.com/playlist?list=PL_h6mFCmTXr-vxhjm7thHy8x9nyAEE7Lf", themes:["ia","pm"] },
+  { id:"27", type:"replay", title:"ProductTank Barcelona — AI Edition", date:"", dateISO:"", loc:"Barcelone (référence proche)", desc:"Édition spéciale IA de ProductTank, référence pour approfondir le sujet IA x Produit.", url:"https://www.youtube.com/watch?v=0qBRlphuGTA", themes:["ia","pm"] }
 ];
 
-const SK = "jb_paris_product_events";
+const SK = "jb_paris_product_events_v2";
 function loadState() {
   try { const s = localStorage.getItem(SK); if (s) return JSON.parse(s); } catch(e) {}
   return { events: DEFAULT_EVENTS };
 }
 function saveState() { localStorage.setItem(SK, JSON.stringify(state)); }
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,5); }
+function toISO(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 
 let state = loadState();
 let activeType = "all";
@@ -237,6 +287,8 @@ let activeTheme = "all";
 let searchQ = "";
 let editingId = null;
 let selectedThemes = [];
+let calCursor = (()=>{ const n=new Date(); return new Date(n.getFullYear(), n.getMonth(), 1); })();
+let selectedDay = null;
 
 function buildNav() {
   const nav = document.getElementById("nav");
@@ -246,7 +298,7 @@ function buildNav() {
   nav.appendChild(lbl);
   Object.entries(TYPES).forEach(([key,cfg]) => nav.appendChild(makeNavBtn(key, cfg.label+"s", cfg.color)));
   const foot = document.createElement("div"); foot.className="nav-foot";
-  foot.textContent = "Sourcé le 03/07/2026. Les meetups récurrents (agenda non publié) sont à revérifier tous les 2-3 semaines sur Meetup.";
+  foot.textContent = "Sourcé le 03/07/2026. Les meetups et formations récurrents (agenda non publié à l'avance) sont à revérifier tous les 2-3 semaines sur Meetup.";
   nav.appendChild(foot);
 }
 function makeNavBtn(filter, label, dot) {
@@ -258,7 +310,7 @@ function makeNavBtn(filter, label, dot) {
   const ct=document.createElement("span"); ct.className="nav-count";
   ct.textContent = filter==="all" ? state.events.length : state.events.filter(p=>p.type===filter).length;
   b.appendChild(ct);
-  b.addEventListener("click", ()=>{ activeType=filter; buildNav(); render(); });
+  b.addEventListener("click", ()=>{ activeType=filter; selectedDay=null; buildNav(); render(); });
   return b;
 }
 
@@ -279,39 +331,160 @@ function buildThemeChips() {
   });
 }
 
-function render() {
-  const grid = document.getElementById("grid");
-  let list = state.events.filter(p => {
+function getFiltered() {
+  return state.events.filter(p => {
     const mt = activeType==="all"||p.type===activeType;
     const mth = activeTheme==="all"||(p.themes||[]).includes(activeTheme);
     const ms = !searchQ||p.title.toLowerCase().includes(searchQ)||(p.desc||"").toLowerCase().includes(searchQ)||(p.loc||"").toLowerCase().includes(searchQ);
     return mt && mth && ms;
   });
-  document.getElementById("sec-title").textContent = activeType==="all"?"Tous les événements":(TYPES[activeType]?.label+"s");
-  document.getElementById("sec-count").textContent = list.length ? list.length+" résultat"+(list.length>1?"s":"") : "";
-  grid.innerHTML = "";
-  if (!list.length) { grid.innerHTML='<div class="empty">Aucun résultat.</div>'; return; }
-  list.forEach(p => {
-    const tcfg = TYPES[p.type] || TYPES.meetup;
-    const card = document.createElement("div");
-    card.className = "card";
-    const themeBadges = (p.themes||[]).map(t=>{ const c=THEMES[t]||{}; return `<span class="badge" style="background:${c.bg||'#eee'};color:${c.color||'#333'}">${c.label||t}</span>`; }).join("");
-    card.innerHTML = `
-      <div class="card-edit" data-id="${p.id}" title="Modifier">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+}
+
+function cardEl(p) {
+  const tcfg = TYPES[p.type] || TYPES.meetup;
+  const card = document.createElement("div");
+  card.className = "card";
+  const themeBadges = (p.themes||[]).map(t=>{ const c=THEMES[t]||{}; return `<span class="badge-neutral">${c.label||t}</span>`; }).join("");
+  card.innerHTML = `
+    <div class="card-edit" data-id="${p.id}" title="Modifier">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    </div>
+    <div class="card-top">
+      <span class="type-badge" style="background:${tcfg.bg};color:${tcfg.color}">${tcfg.label}</span>
+      <span class="card-date">${p.date||""}</span>
+    </div>
+    <div class="card-title">${p.title}</div>
+    ${p.loc ? `<div class="card-loc">📍 ${p.loc}</div>` : ""}
+    <div class="card-desc">${p.desc||""}</div>
+    <div class="card-footer">${themeBadges}</div>
+    ${p.url ? `<a class="card-cta" href="${p.url}" target="_blank" rel="noopener">${tcfg.cta} →</a>` : ""}`;
+  card.querySelector(".card-edit").addEventListener("click", e=>{ e.preventDefault(); e.stopPropagation(); openModal(p.id); });
+  return card;
+}
+
+function cardsInto(container, list, emptyMsg) {
+  container.innerHTML = "";
+  if (!list.length) { container.innerHTML = `<div class="empty">${emptyMsg}</div>`; return; }
+  list.forEach(p => container.appendChild(cardEl(p)));
+}
+
+function render() {
+  const view = document.getElementById("view");
+  const filtered = getFiltered();
+  const isListType = activeType==="podcast" || activeType==="replay";
+
+  if (searchQ) { renderListView(view, filtered, "Résultats de recherche"); return; }
+  if (isListType) { renderListView(view, filtered, TYPES[activeType].label+"s"); return; }
+  renderCalendarView(view, filtered);
+}
+
+function renderListView(view, list, title) {
+  view.innerHTML = `<div class="section-head"><h2>${title}</h2><span>${list.length ? list.length+" résultat"+(list.length>1?"s":"") : ""}</span></div><div class="grid" id="grid"></div>`;
+  cardsInto(document.getElementById("grid"), list, "Aucun résultat.");
+}
+
+function renderCalendarView(view, filtered) {
+  const calItems = filtered.filter(p => CAL_TYPES.includes(p.type) && p.dateISO);
+  const recurItems = filtered.filter(p => CAL_TYPES.includes(p.type) && !p.dateISO)
+    .sort((a,b)=>a.title.localeCompare(b.title));
+
+  const year = calCursor.getFullYear(), month = calCursor.getMonth();
+  const monthLabel = calCursor.toLocaleDateString('fr-FR', { month:'long', year:'numeric' });
+  const today = new Date(); const todayISO = toISO(today);
+
+  const first = new Date(year, month, 1);
+  const startWeekday = (first.getDay()+6)%7;
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+  const daysInPrevMonth = new Date(year, month, 0).getDate();
+  const cells = [];
+  for (let i=startWeekday-1; i>=0; i--) cells.push({ d:new Date(year, month-1, daysInPrevMonth-i), out:true });
+  for (let d=1; d<=daysInMonth; d++) cells.push({ d:new Date(year, month, d), out:false });
+  while (cells.length < 42) { const last=cells[cells.length-1].d; cells.push({ d:new Date(last.getFullYear(), last.getMonth(), last.getDate()+1), out:true }); }
+
+  view.innerHTML = `
+    <div class="cal-header">
+      <div class="cal-nav">
+        <button id="cal-prev" title="Mois précédent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg></button>
+        <div class="cal-title">${monthLabel}</div>
+        <button id="cal-next" title="Mois suivant"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg></button>
       </div>
-      <div class="card-top">
-        <span class="type-badge" style="background:${tcfg.bg};color:${tcfg.color}">${tcfg.label}</span>
-        <span class="card-date">${p.date||""}</span>
+      <button class="btn-today" id="cal-today">Aujourd'hui</button>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+    <div class="subsection">
+      <div class="subsection-head">
+        <h3 id="agenda-title"></h3>
+        <span id="agenda-sub"></span>
+        ${selectedDay ? `<button class="chip-reset" id="btn-clear-day">Voir tout le mois ×</button>` : ""}
       </div>
-      <div class="card-title">${p.title}</div>
-      ${p.loc ? `<div class="card-loc">📍 ${p.loc}</div>` : ""}
-      <div class="card-desc">${p.desc||""}</div>
-      <div class="card-footer">${themeBadges}</div>
-      ${p.url ? `<a class="card-cta" href="${p.url}" target="_blank" rel="noopener">${tcfg.cta} →</a>` : ""}`;
-    card.querySelector(".card-edit").addEventListener("click", e=>{ e.preventDefault(); e.stopPropagation(); openModal(p.id); });
-    grid.appendChild(card);
+      <div class="grid" id="agenda-grid"></div>
+    </div>
+    <div class="subsection">
+      <div class="subsection-head">
+        <h3>Récurrents — agenda à vérifier chaque mois</h3>
+        <span>${recurItems.length} groupe${recurItems.length>1?"s":""}/formation${recurItems.length>1?"s":""}</span>
+      </div>
+      <div class="recur-list" id="recur-list"></div>
+    </div>`;
+
+  const grid = document.getElementById("cal-grid");
+  WEEKDAYS.forEach(w => { const el=document.createElement("div"); el.className="cal-weekday"; el.textContent=w; grid.appendChild(el); });
+  cells.forEach(cell => {
+    const iso = toISO(cell.d);
+    const dayEvents = calItems.filter(e => e.dateISO === iso);
+    const el = document.createElement("div");
+    el.className = "cal-day" + (cell.out?" out":"") + (iso===todayISO?" today":"") + (iso===selectedDay?" selected":"");
+    const dots = dayEvents.slice(0,4).map(e => `<span class="cal-dot" style="background:${(TYPES[e.type]||{}).color||'#888'}"></span>`).join("");
+    el.innerHTML = `<span class="cal-daynum">${cell.d.getDate()}</span><div class="cal-dots">${dots}</div>${dayEvents.length>4?`<span class="cal-more">+${dayEvents.length-4}</span>`:""}`;
+    if (dayEvents.length) el.addEventListener("click", ()=>{ selectedDay = (selectedDay===iso)?null:iso; render(); });
+    grid.appendChild(el);
   });
+
+  let agendaList, agendaTitle, agendaSub;
+  if (selectedDay) {
+    agendaList = calItems.filter(e => e.dateISO === selectedDay).sort((a,b)=>a.dateISO.localeCompare(b.dateISO));
+    agendaTitle = new Date(selectedDay+"T00:00:00").toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long' });
+    agendaSub = `${agendaList.length} événement${agendaList.length>1?"s":""}`;
+  } else {
+    const monthPrefix = `${year}-${String(month+1).padStart(2,'0')}`;
+    agendaList = calItems.filter(e => e.dateISO.startsWith(monthPrefix)).sort((a,b)=>a.dateISO.localeCompare(b.dateISO));
+    agendaTitle = "Événements du mois";
+    agendaSub = `${agendaList.length} résultat${agendaList.length>1?"s":""}`;
+  }
+  document.getElementById("agenda-title").textContent = agendaTitle;
+  document.getElementById("agenda-sub").textContent = agendaSub;
+  cardsInto(document.getElementById("agenda-grid"), agendaList, "Aucun événement daté ce mois-ci. Regardez la liste des récurrents ci-dessous, ou changez de mois.");
+
+  const recurWrap = document.getElementById("recur-list");
+  recurWrap.innerHTML = "";
+  if (!recurItems.length) { recurWrap.innerHTML = `<div class="empty">Aucun élément récurrent pour ce filtre.</div>`; }
+  recurItems.forEach(p => {
+    const tcfg = TYPES[p.type] || TYPES.meetup;
+    const row = document.createElement("div");
+    row.className = "recur-item";
+    row.innerHTML = `
+      <span class="type-badge" style="background:${tcfg.bg};color:${tcfg.color}">${tcfg.label}</span>
+      <div class="recur-item-body">
+        <div class="recur-item-title">${p.title}</div>
+        <div class="recur-item-loc">${p.loc||""}</div>
+      </div>
+      <button class="recur-item-edit" data-id="${p.id}" title="Modifier"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+      ${p.url ? `<a href="${p.url}" target="_blank" rel="noopener">${tcfg.cta} →</a>` : ""}`;
+    row.querySelector(".recur-item-edit").addEventListener("click", ()=>openModal(p.id));
+    recurWrap.appendChild(row);
+  });
+
+  document.getElementById("cal-prev").addEventListener("click", ()=>{ calCursor=new Date(year,month-1,1); selectedDay=null; render(); });
+  document.getElementById("cal-next").addEventListener("click", ()=>{ calCursor=new Date(year,month+1,1); selectedDay=null; render(); });
+  document.getElementById("cal-today").addEventListener("click", ()=>{ const n=new Date(); calCursor=new Date(n.getFullYear(),n.getMonth(),1); selectedDay=null; render(); });
+  const clearBtn = document.getElementById("btn-clear-day");
+  if (clearBtn) clearBtn.addEventListener("click", ()=>{ selectedDay=null; render(); });
+}
+
+function populateTypeSelect() {
+  const sel = document.getElementById("f-type");
+  sel.innerHTML = "";
+  Object.entries(TYPES).forEach(([k,c]) => { const o=document.createElement("option"); o.value=k; o.textContent=c.label; sel.appendChild(o); });
 }
 
 function openModal(id) {
@@ -321,6 +494,7 @@ function openModal(id) {
   document.getElementById("f-title").value = p?.title||"";
   document.getElementById("f-type").value  = p?.type||"meetup";
   document.getElementById("f-date").value  = p?.date||"";
+  document.getElementById("f-dateiso").value = p?.dateISO||"";
   document.getElementById("f-loc").value   = p?.loc||"";
   document.getElementById("f-desc").value  = p?.desc||"";
   document.getElementById("f-url").value   = p?.url||"";
@@ -339,7 +513,7 @@ function renderChips() {
     const sel = selectedThemes.includes(key);
     const chip = document.createElement("div");
     chip.className = "tag-chip";
-    if (sel) { chip.style.background=cfg.bg; chip.style.color=cfg.color; chip.style.borderColor="transparent"; }
+    if (sel) { chip.style.background="var(--accent-bg)"; chip.style.color="var(--accent)"; chip.style.borderColor="transparent"; }
     chip.innerHTML = `<div class="chip-dot" style="background:${cfg.dot}"></div><span>${cfg.label}</span>`;
     chip.addEventListener("click", ()=>{ selectedThemes = sel ? selectedThemes.filter(t=>t!==key) : [...selectedThemes,key]; renderChips(); });
     wrap.appendChild(chip);
@@ -349,7 +523,7 @@ function renderChips() {
 document.getElementById("btn-save").addEventListener("click", ()=>{
   const title = document.getElementById("f-title").value.trim();
   if (!title) { document.getElementById("f-title").focus(); return; }
-  const data = { id:editingId||uid(), title, type:document.getElementById("f-type").value, date:document.getElementById("f-date").value.trim(), loc:document.getElementById("f-loc").value.trim(), desc:document.getElementById("f-desc").value.trim(), url:document.getElementById("f-url").value.trim(), themes:[...selectedThemes] };
+  const data = { id:editingId||uid(), title, type:document.getElementById("f-type").value, date:document.getElementById("f-date").value.trim(), dateISO:document.getElementById("f-dateiso").value, loc:document.getElementById("f-loc").value.trim(), desc:document.getElementById("f-desc").value.trim(), url:document.getElementById("f-url").value.trim(), themes:[...selectedThemes] };
   state.events = editingId ? state.events.map(p=>p.id===editingId?data:p) : [data,...state.events];
   saveState(); buildNav(); render(); closeModal();
 });
@@ -366,6 +540,7 @@ document.getElementById("overlay").addEventListener("click", e=>{ if(e.target===
 document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeModal(); });
 document.getElementById("search").addEventListener("input", e=>{ searchQ=e.target.value.toLowerCase().trim(); render(); });
 
+populateTypeSelect();
 buildNav(); buildThemeChips(); render();
 </script>
 </body>
