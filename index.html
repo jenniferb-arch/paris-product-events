@@ -86,29 +86,27 @@
     .btn-today { font-size: 12px; padding: 6px 12px; border-radius: var(--rs); border: 0.5px solid var(--border-md); background: var(--surface); cursor: pointer; color: var(--text2); }
     .btn-today:hover { background: var(--surface2); }
 
-    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 1.75rem; }
-    .cal-weekday { font-size: 10px; font-weight: 600; color: var(--text3); text-transform: uppercase; text-align: center; padding-bottom: 4px; }
-    .cal-day { min-height: 72px; border-radius: 10px; border: 0.5px solid var(--border); background: var(--surface); padding: 6px; cursor: pointer; display: flex; flex-direction: column; gap: 4px; transition: border-color .12s, background .12s; }
-    .cal-day:hover { border-color: var(--border-md); }
-    .cal-day.out { opacity: .35; }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 1.5rem; max-width: 560px; }
+    .cal-weekday { font-size: 9px; font-weight: 600; color: var(--text3); text-transform: uppercase; text-align: center; padding-bottom: 3px; }
+    .cal-day { height: 40px; border-radius: 8px; border: 0.5px solid var(--border); background: var(--surface); padding: 4px 5px; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    .cal-day.out { opacity: .3; }
+    .cal-day.today { border-color: var(--accent); }
     .cal-day.today .cal-daynum { color: var(--accent); font-weight: 700; }
-    .cal-day.selected { background: var(--accent-bg); border-color: var(--accent); }
     .cal-daynum { font-size: 11px; color: var(--text2); font-weight: 500; }
-    .cal-dots { display: flex; flex-wrap: wrap; gap: 3px; }
-    .cal-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-    .cal-more { font-size: 9px; color: var(--text3); }
+    .cal-dots { display: flex; gap: 2px; }
+    .cal-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
 
-    .subsection { margin-top: 1.75rem; }
-    .subsection-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: .9rem; }
+    .subsection { margin-top: 1.5rem; max-width: 720px; }
+    .subsection-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: .7rem; }
     .subsection-head h3 { font-size: 13px; font-weight: 600; color: var(--text2); }
     .subsection-head span { font-size: 11px; color: var(--text3); }
-    .chip-reset { font-size: 11px; color: var(--accent); background: none; border: none; cursor: pointer; font-weight: 500; }
-    .recur-list { display: flex; flex-direction: column; gap: 8px; }
-    .recur-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--rs); border: 0.5px solid var(--border); background: var(--surface); }
+    .recur-list { display: flex; flex-direction: column; gap: 6px; }
+    .recur-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: var(--rs); border: 0.5px solid var(--border); background: var(--surface); }
     .recur-item .type-badge { flex-shrink: 0; }
+    .recur-item-date { font-size: 11px; color: var(--text3); width: 88px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .recur-item-body { flex: 1; min-width: 0; }
-    .recur-item-title { font-size: 13px; font-weight: 500; }
-    .recur-item-loc { font-size: 11px; color: var(--text3); margin-top: 1px; }
+    .recur-item-title { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .recur-item-loc { font-size: 11px; color: var(--text3); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .recur-item a { font-size: 12px; color: var(--accent); text-decoration: none; font-weight: 500; white-space: nowrap; flex-shrink: 0; }
     .recur-item a:hover { text-decoration: underline; }
     .recur-item-edit { width: 24px; height: 24px; border-radius: 6px; background: var(--surface2); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text2); flex-shrink: 0; }
@@ -217,12 +215,11 @@
 
 <script>
 const TYPES = {
-  meetup:     { label:"Meetup",     color:"#26215C", bg:"#EEEDFE", cta:"S'inscrire",      calendar:true  },
-  conference: { label:"Conférence", color:"#4B1528", bg:"#FBEAF0", cta:"S'inscrire",      calendar:true  },
-  webinar:    { label:"Webinar",    color:"#042C53", bg:"#E6F1FB", cta:"S'inscrire",      calendar:true  },
-  formation:  { label:"Formation",  color:"#27500A", bg:"#EAF3DE", cta:"Voir la formation", calendar:true },
-  podcast:    { label:"Podcast",    color:"#4A1B0C", bg:"#FAECE7", cta:"Écouter",         calendar:false },
-  replay:     { label:"Replay",     color:"#085041", bg:"#E1F5EE", cta:"Regarder",        calendar:false }
+  meetup:     { label:"Meetup",     color:"#26215C", bg:"#EEEDFE", cta:"S'inscrire", calendar:true  },
+  conference: { label:"Conférence", color:"#4B1528", bg:"#FBEAF0", cta:"S'inscrire", calendar:true  },
+  webinar:    { label:"Webinar",    color:"#042C53", bg:"#E6F1FB", cta:"S'inscrire", calendar:true  },
+  podcast:    { label:"Podcast",    color:"#4A1B0C", bg:"#FAECE7", cta:"Écouter",    calendar:false },
+  replay:     { label:"Replay",     color:"#085041", bg:"#E1F5EE", cta:"Regarder",   calendar:false }
 };
 const THEMES = {
   pm:     { label:"Product Management", dot:"#534AB7" },
@@ -244,9 +241,6 @@ const DEFAULT_EVENTS = [
   { id:"9", type:"meetup", title:"Star d'UX .Paris", date:"Agenda récurrent — à vérifier sur Meetup", dateISO:"", loc:"Paris", desc:"Communauté des professionnels UX de Paris : soirées thématiques avec deux experts invités, suivies de networking.", url:"https://www.meetup.com/star-dux/", themes:["design"] },
   { id:"10", type:"meetup", title:"School of Product Paris (ateliers réguliers)", date:"Agenda récurrent — à vérifier sur Meetup", dateISO:"", loc:"Paris, souvent chez OCTO Technology", desc:"Ateliers en petits groupes (30 personnes max) : 20-30 min de théorie suivis d'exercices pratiques, puis apéro networking.", url:"https://www.meetup.com/fr-fr/school_of_product/", themes:["pm","design"] },
   { id:"11", type:"meetup", title:"Design Systems France (Paris)", date:"Agenda récurrent — à vérifier sur Meetup", dateISO:"", loc:"Paris", desc:"Communauté dédiée aux « builders » de Design Systems dans l'écosystème français — ateliers et talks.", url:"https://www.meetup.com/designsystemsfrance-paris/", themes:["design"] },
-
-  { id:"12", type:"formation", title:"OCTO Academy — Devenir Product Manager", date:"Sessions récurrentes", dateISO:"", loc:"Paris / à distance", desc:"Formation professionnelle sur le rôle de Product Manager, catalogue Product & Design d'OCTO Academy.", url:"https://www.octo.academy/catalogue/domaine/product-management/", themes:["pm"] },
-  { id:"13", type:"formation", title:"Ironhack — AI Product Manager", date:"Sessions récurrentes, à distance", dateISO:"", loc:"En ligne", desc:"Formation Product Manager orientée IA, à distance, avec accélérateur associant des startups partenaires.", url:"https://www.ironhack.com/fr/product-manager-ia/a-distance", themes:["pm","ia"] },
 
   { id:"28", type:"webinar", title:"SVPG Product Masterclass", date:"7-9 juillet 2026, 8h-13h PDT (~17h-22h Paris)", dateISO:"2026-07-07", loc:"En ligne (Zoom) — Silicon Valley Product Group", desc:"Cours interactif de 3 jours sur les fondamentaux du product management moderne : stratégie, découverte produit, et impact de l'IA générative sur le métier de PM.", url:"https://www.eventbrite.com/e/svpg-product-masterclass-tickets-1989265821622", themes:["pm","ia"] },
   { id:"29", type:"webinar", title:"Agent Analytics — Stop Measuring AI Activity. Start Measuring AI Impact.", date:"15 juillet 2026", dateISO:"2026-07-15", loc:"En ligne — Amplitude", desc:"Amplitude présente « Agent Analytics », qui relie la qualité des agents IA aux métriques de conversion, rétention et revenu.", url:"https://amplitude.com/events", themes:["ia","pm"] },
@@ -272,7 +266,7 @@ const DEFAULT_EVENTS = [
   { id:"27", type:"replay", title:"ProductTank Barcelona — AI Edition", date:"", dateISO:"", loc:"Barcelone (référence proche)", desc:"Édition spéciale IA de ProductTank, référence pour approfondir le sujet IA x Produit.", url:"https://www.youtube.com/watch?v=0qBRlphuGTA", themes:["ia","pm"] }
 ];
 
-const SK = "jb_paris_product_events_v2";
+const SK = "jb_paris_product_events_v3";
 function loadState() {
   try { const s = localStorage.getItem(SK); if (s) return JSON.parse(s); } catch(e) {}
   return { events: DEFAULT_EVENTS };
@@ -288,7 +282,6 @@ let searchQ = "";
 let editingId = null;
 let selectedThemes = [];
 let calCursor = (()=>{ const n=new Date(); return new Date(n.getFullYear(), n.getMonth(), 1); })();
-let selectedDay = null;
 
 function buildNav() {
   const nav = document.getElementById("nav");
@@ -298,7 +291,7 @@ function buildNav() {
   nav.appendChild(lbl);
   Object.entries(TYPES).forEach(([key,cfg]) => nav.appendChild(makeNavBtn(key, cfg.label+"s", cfg.color)));
   const foot = document.createElement("div"); foot.className="nav-foot";
-  foot.textContent = "Sourcé le 03/07/2026. Les meetups et formations récurrents (agenda non publié à l'avance) sont à revérifier tous les 2-3 semaines sur Meetup.";
+  foot.textContent = "Sourcé le 03/07/2026. Les meetups récurrents (agenda non publié à l'avance) sont à revérifier tous les 2-3 semaines sur Meetup.";
   nav.appendChild(foot);
 }
 function makeNavBtn(filter, label, dot) {
@@ -310,7 +303,7 @@ function makeNavBtn(filter, label, dot) {
   const ct=document.createElement("span"); ct.className="nav-count";
   ct.textContent = filter==="all" ? state.events.length : state.events.filter(p=>p.type===filter).length;
   b.appendChild(ct);
-  b.addEventListener("click", ()=>{ activeType=filter; selectedDay=null; buildNav(); render(); });
+  b.addEventListener("click", ()=>{ activeType=filter; buildNav(); render(); });
   return b;
 }
 
@@ -383,6 +376,30 @@ function renderListView(view, list, title) {
   cardsInto(document.getElementById("grid"), list, "Aucun résultat.");
 }
 
+function eventRow(p, opts) {
+  opts = opts || {};
+  const tcfg = TYPES[p.type] || TYPES.meetup;
+  const row = document.createElement("div");
+  row.className = "recur-item";
+  const dateCol = opts.showDate ? `<span class="recur-item-date" title="${(p.date||"").replace(/"/g,'&quot;')}">${p.date||""}</span>` : "";
+  row.innerHTML = `
+    <span class="type-badge" style="background:${tcfg.bg};color:${tcfg.color}">${tcfg.label}</span>
+    ${dateCol}
+    <div class="recur-item-body">
+      <div class="recur-item-title">${p.title}</div>
+      <div class="recur-item-loc">${p.loc||""}</div>
+    </div>
+    <button class="recur-item-edit" data-id="${p.id}" title="Modifier"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+    ${p.url ? `<a href="${p.url}" target="_blank" rel="noopener">${tcfg.cta} →</a>` : ""}`;
+  row.querySelector(".recur-item-edit").addEventListener("click", ()=>openModal(p.id));
+  return row;
+}
+function rowsInto(container, list, emptyMsg, opts) {
+  container.innerHTML = "";
+  if (!list.length) { container.innerHTML = `<div class="empty">${emptyMsg}</div>`; return; }
+  list.forEach(p => container.appendChild(eventRow(p, opts)));
+}
+
 function renderCalendarView(view, filtered) {
   const calItems = filtered.filter(p => CAL_TYPES.includes(p.type) && p.dateISO);
   const recurItems = filtered.filter(p => CAL_TYPES.includes(p.type) && !p.dateISO)
@@ -391,6 +408,8 @@ function renderCalendarView(view, filtered) {
   const year = calCursor.getFullYear(), month = calCursor.getMonth();
   const monthLabel = calCursor.toLocaleDateString('fr-FR', { month:'long', year:'numeric' });
   const today = new Date(); const todayISO = toISO(today);
+  const monthPrefix = `${year}-${String(month+1).padStart(2,'0')}`;
+  const monthList = calItems.filter(e => e.dateISO.startsWith(monthPrefix)).sort((a,b)=>a.dateISO.localeCompare(b.dateISO));
 
   const first = new Date(year, month, 1);
   const startWeekday = (first.getDay()+6)%7;
@@ -413,16 +432,15 @@ function renderCalendarView(view, filtered) {
     <div class="cal-grid" id="cal-grid"></div>
     <div class="subsection">
       <div class="subsection-head">
-        <h3 id="agenda-title"></h3>
-        <span id="agenda-sub"></span>
-        ${selectedDay ? `<button class="chip-reset" id="btn-clear-day">Voir tout le mois ×</button>` : ""}
+        <h3>Événements du mois</h3>
+        <span>${monthList.length} résultat${monthList.length>1?"s":""}</span>
       </div>
-      <div class="grid" id="agenda-grid"></div>
+      <div class="recur-list" id="month-list"></div>
     </div>
     <div class="subsection">
       <div class="subsection-head">
-        <h3>Récurrents — agenda à vérifier chaque mois</h3>
-        <span>${recurItems.length} groupe${recurItems.length>1?"s":""}/formation${recurItems.length>1?"s":""}</span>
+        <h3>Meetups récurrents — agenda à vérifier chaque mois</h3>
+        <span>${recurItems.length} groupe${recurItems.length>1?"s":""}</span>
       </div>
       <div class="recur-list" id="recur-list"></div>
     </div>`;
@@ -433,52 +451,18 @@ function renderCalendarView(view, filtered) {
     const iso = toISO(cell.d);
     const dayEvents = calItems.filter(e => e.dateISO === iso);
     const el = document.createElement("div");
-    el.className = "cal-day" + (cell.out?" out":"") + (iso===todayISO?" today":"") + (iso===selectedDay?" selected":"");
-    const dots = dayEvents.slice(0,4).map(e => `<span class="cal-dot" style="background:${(TYPES[e.type]||{}).color||'#888'}"></span>`).join("");
-    el.innerHTML = `<span class="cal-daynum">${cell.d.getDate()}</span><div class="cal-dots">${dots}</div>${dayEvents.length>4?`<span class="cal-more">+${dayEvents.length-4}</span>`:""}`;
-    if (dayEvents.length) el.addEventListener("click", ()=>{ selectedDay = (selectedDay===iso)?null:iso; render(); });
+    el.className = "cal-day" + (cell.out?" out":"") + (iso===todayISO?" today":"");
+    const dots = dayEvents.slice(0,3).map(e => `<span class="cal-dot" style="background:${(TYPES[e.type]||{}).color||'#888'}"></span>`).join("");
+    el.innerHTML = `<span class="cal-daynum">${cell.d.getDate()}</span><div class="cal-dots">${dots}</div>`;
     grid.appendChild(el);
   });
 
-  let agendaList, agendaTitle, agendaSub;
-  if (selectedDay) {
-    agendaList = calItems.filter(e => e.dateISO === selectedDay).sort((a,b)=>a.dateISO.localeCompare(b.dateISO));
-    agendaTitle = new Date(selectedDay+"T00:00:00").toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long' });
-    agendaSub = `${agendaList.length} événement${agendaList.length>1?"s":""}`;
-  } else {
-    const monthPrefix = `${year}-${String(month+1).padStart(2,'0')}`;
-    agendaList = calItems.filter(e => e.dateISO.startsWith(monthPrefix)).sort((a,b)=>a.dateISO.localeCompare(b.dateISO));
-    agendaTitle = "Événements du mois";
-    agendaSub = `${agendaList.length} résultat${agendaList.length>1?"s":""}`;
-  }
-  document.getElementById("agenda-title").textContent = agendaTitle;
-  document.getElementById("agenda-sub").textContent = agendaSub;
-  cardsInto(document.getElementById("agenda-grid"), agendaList, "Aucun événement daté ce mois-ci. Regardez la liste des récurrents ci-dessous, ou changez de mois.");
+  rowsInto(document.getElementById("month-list"), monthList, "Aucun événement daté ce mois-ci. Regardez les récurrents ci-dessous, ou changez de mois.", { showDate:true });
+  rowsInto(document.getElementById("recur-list"), recurItems, "Aucun meetup récurrent pour ce filtre.");
 
-  const recurWrap = document.getElementById("recur-list");
-  recurWrap.innerHTML = "";
-  if (!recurItems.length) { recurWrap.innerHTML = `<div class="empty">Aucun élément récurrent pour ce filtre.</div>`; }
-  recurItems.forEach(p => {
-    const tcfg = TYPES[p.type] || TYPES.meetup;
-    const row = document.createElement("div");
-    row.className = "recur-item";
-    row.innerHTML = `
-      <span class="type-badge" style="background:${tcfg.bg};color:${tcfg.color}">${tcfg.label}</span>
-      <div class="recur-item-body">
-        <div class="recur-item-title">${p.title}</div>
-        <div class="recur-item-loc">${p.loc||""}</div>
-      </div>
-      <button class="recur-item-edit" data-id="${p.id}" title="Modifier"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-      ${p.url ? `<a href="${p.url}" target="_blank" rel="noopener">${tcfg.cta} →</a>` : ""}`;
-    row.querySelector(".recur-item-edit").addEventListener("click", ()=>openModal(p.id));
-    recurWrap.appendChild(row);
-  });
-
-  document.getElementById("cal-prev").addEventListener("click", ()=>{ calCursor=new Date(year,month-1,1); selectedDay=null; render(); });
-  document.getElementById("cal-next").addEventListener("click", ()=>{ calCursor=new Date(year,month+1,1); selectedDay=null; render(); });
-  document.getElementById("cal-today").addEventListener("click", ()=>{ const n=new Date(); calCursor=new Date(n.getFullYear(),n.getMonth(),1); selectedDay=null; render(); });
-  const clearBtn = document.getElementById("btn-clear-day");
-  if (clearBtn) clearBtn.addEventListener("click", ()=>{ selectedDay=null; render(); });
+  document.getElementById("cal-prev").addEventListener("click", ()=>{ calCursor=new Date(year,month-1,1); render(); });
+  document.getElementById("cal-next").addEventListener("click", ()=>{ calCursor=new Date(year,month+1,1); render(); });
+  document.getElementById("cal-today").addEventListener("click", ()=>{ const n=new Date(); calCursor=new Date(n.getFullYear(),n.getMonth(),1); render(); });
 }
 
 function populateTypeSelect() {
