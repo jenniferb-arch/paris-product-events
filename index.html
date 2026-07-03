@@ -71,6 +71,7 @@
     .card:hover { border-color: var(--border-md); transform: translateY(-2px); }
     .card:hover .card-actions { opacity: 1; }
     .card-actions { position: absolute; top: 10px; right: 10px; display: flex; gap: 4px; opacity: 0; transition: opacity .15s; z-index: 1; }
+    .card-thumb { display: block; width: calc(100% + 2.2rem); height: 130px; object-fit: cover; margin: -1.1rem -1.1rem 0; border-radius: var(--r) var(--r) 0 0; background: var(--surface2); }
     .card-icon-btn { width: 26px; height: 26px; border-radius: 7px; background: var(--surface2); border: 0.5px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text2); flex-shrink: 0; }
     .card-icon-btn svg { width: 12px; height: 12px; }
     .card-icon-btn.is-fav { opacity: 1; color: #C9A227; }
@@ -198,7 +199,7 @@
     <div class="field">
       <label>Lien de l'événement / épisode</label>
       <input id="f-quick-url" type="text" placeholder="https://…" />
-      <span class="field-hint">Le titre est déduit automatiquement du lien. Modifie-le ensuite avec le crayon ✏️ sur la carte si besoin.</span>
+      <span class="field-hint">Titre, image, description et typologie sont récupérés automatiquement depuis le lien. Modifie-les ensuite avec le crayon ✏️ sur la carte si besoin.</span>
     </div>
     <div class="modal-actions">
       <button class="btn-save" id="btn-quick-save">Ajouter</button>
@@ -384,6 +385,30 @@ function replayIsRecentEnough(p) {
   if (!p.dateISO) return true;
   return isWithinLastYear(p.dateISO);
 }
+function guessTypeFromUrl(url, meta) {
+  let h = "";
+  try { h = new URL(url).hostname.replace(/^www\./,''); } catch(e) {}
+  if (/spotify\.com|podcasts\.apple\.com|deezer\.com|ausha\.co|substack\.com|acast\.com/.test(h)) return "podcast";
+  if (/youtube\.com|youtu\.be/.test(h)) return "replay";
+  const text = ((meta.title||"") + " " + (meta.desc||"")).toLowerCase();
+  if (/webinar|en ligne|online event|virtual event|zoom|teams meeting/.test(text)) return "meetup_ligne";
+  return "meetup_physique";
+}
+async function fetchLinkMeta(url) {
+  try {
+    const r = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(url)}`);
+    const json = await r.json();
+    if (!json || json.status !== "success" || !json.data) return {};
+    const d = json.data;
+    return {
+      title: d.title || "",
+      desc: d.description ? d.description.slice(0,220) : "",
+      image: (d.image && d.image.url) || "",
+      loc: d.publisher || "",
+      type: guessTypeFromUrl(url, { title:d.title, desc:d.description })
+    };
+  } catch(e) { return {}; }
+}
 function titleFromUrl(url) {
   try {
     const u = new URL(url);
@@ -475,6 +500,7 @@ function cardEl(p) {
   const isPodcast = p.type === "podcast";
   const isFav = favorites.includes(p.id);
   card.innerHTML = `
+    ${p.image ? `<img class="card-thumb" src="${p.image}" alt="" loading="lazy">` : ""}
     <div class="card-actions">
       ${isPodcast ? `<button class="card-icon-btn${isFav?' is-fav':''}" data-act="fav" data-id="${p.id}" title="${isFav?'Retirer des favoris':'Ajouter aux favoris'}"><svg viewBox="0 0 24 24" fill="${isFav?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>` : ""}
       ${isPodcast ? `<button class="card-icon-btn" data-act="share" data-id="${p.id}" title="Partager"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><path d="M16 6l-4-4-4 4"/><path d="M12 2v13"/></svg></button>` : ""}
@@ -739,12 +765,16 @@ document.getElementById("btn-new").addEventListener("click", ()=>{
 });
 document.getElementById("add-close").addEventListener("click", ()=>document.getElementById("overlay-add").classList.remove("open"));
 document.getElementById("overlay-add").addEventListener("click", e=>{ if(e.target===e.currentTarget) document.getElementById("overlay-add").classList.remove("open"); });
-document.getElementById("btn-quick-save").addEventListener("click", ()=>{
+document.getElementById("btn-quick-save").addEventListener("click", async ()=>{
   let url = document.getElementById("f-quick-url").value.trim();
   if (!url) { document.getElementById("f-quick-url").focus(); toast("Colle un lien avant d'ajouter."); return; }
   if (!/^https?:\/\//i.test(url)) url = "https://" + url;
-  const type = TYPES[activeType] ? activeType : "meetup_physique";
-  const data = { id:uid(), title:titleFromUrl(url), type, date:"", dateISO:"", loc:"", desc:"", url, themes:[] };
+  const btn = document.getElementById("btn-quick-save");
+  btn.disabled = true; const origLabel = btn.textContent; btn.textContent = "Récupération des infos…";
+  const meta = await fetchLinkMeta(url);
+  btn.disabled = false; btn.textContent = origLabel;
+  const type = TYPES[activeType] ? activeType : (meta.type || "meetup_physique");
+  const data = { id:uid(), title: meta.title || titleFromUrl(url), type, date:"", dateISO:"", loc: meta.loc||"", desc: meta.desc||"", url, themes:[], image: meta.image||"" };
   state.events = [data, ...state.events];
   saveState(); buildNav(); render();
   document.getElementById("overlay-add").classList.remove("open");
