@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Paris Product Events — Meetups, Conférences, Podcasts &amp; Replays</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📅</text></svg>">
   <style>
@@ -155,7 +155,7 @@
     .view-image-msg { font-size: 12px; color: var(--text3); padding: 2rem; text-align: center; }
     .view-cta { text-decoration: none; text-align: center; }
 
-    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--text1); color: var(--bg); font-size: 13px; padding: 10px 16px; border-radius: var(--rs); opacity: 0; pointer-events: none; transition: all .25s; z-index: 200; max-width: calc(100vw - 32px); text-align: center; }
+    .toast { position: fixed; bottom: calc(24px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%) translateY(20px); background: var(--text1); color: var(--bg); font-size: 13px; padding: 10px 16px; border-radius: var(--rs); opacity: 0; pointer-events: none; transition: all .25s; z-index: 200; max-width: calc(100vw - 32px); text-align: center; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
     .nav-scroll { display: flex; flex-direction: column; gap: 2px; }
@@ -168,7 +168,7 @@
     @media (max-width: 860px) {
       .layout { flex-direction: column; }
       nav { width: 100%; height: auto; position: static; border-right: none; border-bottom: 0.5px solid var(--border); padding: 1.25rem 1rem; }
-      .nav-scroll { flex-direction: row; overflow-x: auto; align-items: center; gap: 6px; padding-bottom: 2px; -webkit-overflow-scrolling: touch; }
+      .nav-scroll { flex-direction: row; overflow-x: auto; align-items: center; gap: 6px; padding-bottom: 2px; -webkit-overflow-scrolling: touch; mask-image: linear-gradient(to right, transparent 0, black 16px, black calc(100% - 16px), transparent 100%); -webkit-mask-image: linear-gradient(to right, transparent 0, black 16px, black calc(100% - 16px), transparent 100%); }
       .nav-scroll .nav-lbl { display: none; }
       .nav-scroll .nav-btn { width: auto; white-space: nowrap; padding: 7px 10px; }
       .nav-foot { margin-top: 1rem; }
@@ -178,14 +178,19 @@
       .search-wrap { max-width: none; flex: 1 1 100%; }
       .btn-new { margin-left: 0; flex: 1 1 100%; justify-content: center; }
       .grid, .fav-grid { grid-template-columns: 1fr; }
-      .card-top.wide-actions { padding-right: 92px; }
+      .card-top { padding-right: 54px; }
+      .card-top.wide-actions { padding-right: 150px; }
       .modal-webview { width: 94vw; }
       .recur-item { flex-wrap: wrap; }
       .recur-item-date { width: auto; }
+      .card-icon-btn, .recur-item-edit, .modal-close { width: 44px; height: 44px; }
+      .card-desc { font-size: 13px; }
+      .badge-neutral, .type-badge { font-size: 11px; }
     }
 
     @media (max-width: 480px) {
       .field-row { grid-template-columns: 1fr; }
+      .modal { padding: 1.25rem; }
     }
   </style>
 </head>
