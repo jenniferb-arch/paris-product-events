@@ -142,9 +142,11 @@
     .btn-delete { padding: 10px 14px; font-size: 13px; background: var(--danger-bg); color: var(--danger); border: none; border-radius: var(--rs); cursor: pointer; }
     .btn-delete:hover { opacity: .8; }
 
-    .modal-webview { max-width: 920px; width: 92vw; height: 86vh; }
-    .webview-hint { font-size: 11px; color: var(--text3); }
-    .webview-iframe { flex: 1; width: 100%; border: 0.5px solid var(--border); border-radius: var(--rs); background: var(--surface2); }
+    .modal-webview { max-width: 640px; width: 92vw; }
+    .webview-hint { font-size: 12px; color: var(--text2); line-height: 1.5; }
+    .view-image-box { width: 100%; min-height: 200px; max-height: 50vh; display: flex; align-items: center; justify-content: center; border-radius: var(--rs); background: var(--surface2); overflow: hidden; }
+    .view-image-box img { max-width: 100%; max-height: 50vh; object-fit: contain; display: block; }
+    .view-image-msg { font-size: 12px; color: var(--text3); padding: 2rem; text-align: center; }
     .view-cta { text-decoration: none; text-align: center; }
 
     .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--text1); color: var(--bg); font-size: 13px; padding: 10px 16px; border-radius: var(--rs); opacity: 0; pointer-events: none; transition: all .25s; z-index: 200; }
@@ -255,8 +257,8 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
     </div>
-    <div class="webview-hint">Certains sites (LinkedIn, YouTube, Spotify…) refusent l'aperçu intégré — dans ce cas utilise le bouton ci-dessous.</div>
-    <iframe id="view-iframe" class="webview-iframe" referrerpolicy="no-referrer"></iframe>
+    <div id="view-desc" class="webview-hint"></div>
+    <div id="view-image-box" class="view-image-box"></div>
     <div class="modal-actions">
       <a class="btn-save view-cta" id="view-cta" href="#" target="_blank" rel="noopener">S'inscrire →</a>
     </div>
@@ -507,15 +509,31 @@ async function shareItem(p) {
 function openWebview(p) {
   const tcfg = TYPES[p.type] || TYPES.meetup_physique;
   document.getElementById("view-title").textContent = p.title;
-  document.getElementById("view-iframe").src = p.url || "about:blank";
+  document.getElementById("view-desc").textContent = p.desc || "";
   const cta = document.getElementById("view-cta");
   cta.href = p.url || "#";
   cta.textContent = `${tcfg.cta} →`;
   document.getElementById("overlay-view").classList.add("open");
+  renderWebviewImage(p);
 }
 function closeWebview() {
   document.getElementById("overlay-view").classList.remove("open");
-  document.getElementById("view-iframe").src = "about:blank";
+}
+function renderWebviewImage(p) {
+  const box = document.getElementById("view-image-box");
+  if (p.image) { box.innerHTML = `<img src="${p.image}" alt="">`; return; }
+  if (!p.url) { box.innerHTML = `<div class="view-image-msg">Pas de lien pour cet élément.</div>`; return; }
+  box.innerHTML = `<div class="view-image-msg">Chargement de l'aperçu…</div>`;
+  fetch(`https://api.microlink.io/?url=${encodeURIComponent(p.url)}`)
+    .then(r => r.json())
+    .then(json => {
+      const img = json && json.data && json.data.image && json.data.image.url;
+      if (!img) { box.innerHTML = `<div class="view-image-msg">Pas d'aperçu disponible pour ce lien — utilise le bouton ci-dessous.</div>`; return; }
+      const ev = state.events.find(e=>e.id===p.id);
+      if (ev) { ev.image = img; saveState(); }
+      box.innerHTML = `<img src="${img}" alt="">`;
+    })
+    .catch(()=>{ box.innerHTML = `<div class="view-image-msg">Aperçu indisponible — utilise le bouton ci-dessous.</div>`; });
 }
 
 function render() {
