@@ -39,6 +39,8 @@
     .nav-count { margin-left: auto; font-size: 11px; background: var(--surface2); color: var(--text2); border-radius: 99px; padding: 1px 7px; }
     .nav-btn.active .nav-count { background: var(--accent-bg); color: var(--accent); }
     .nav-foot { margin-top: auto; font-size: 10px; color: var(--text3); line-height: 1.5; padding: 0 6px; }
+    .nav-foot a { color: var(--accent); text-decoration: none; font-weight: 500; }
+    .nav-foot a:hover { text-decoration: underline; }
 
     main { flex: 1; padding: 2.25rem 2rem 4rem; min-width: 0; }
     .topbar { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap; row-gap: 10px; }
@@ -231,7 +233,7 @@ const WEEKDAYS = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
 
 const DEFAULT_EVENTS = [
   { id:"1", type:"meetup", title:"ProductTank Paris — Designing for Adoption: Turning AI Strategy Into Live Value", date:"24 septembre 2026, 19h00", dateISO:"2026-09-24", loc:"5 Degrés Paris, 12 rue de la Bourse, 75002 Paris", desc:"Kevin Stewart (Format-3) présente un cadre pour transformer une stratégie IA en valeur concrète ; retour d'expérience de transformation IA par l'équipe de 5 Degrés. Format bilingue, suivi d'un apéro networking.", url:"https://www.meetup.com/producttank-paris/", themes:["pm","ia"] },
-  { id:"2", type:"conference", title:"La Conf — School of Product Paris", date:"17 novembre 2026", dateISO:"2026-11-17", loc:"Pavillon Chesnaie du Roy, 75012 Paris", desc:"Événement phare annuel de School of Product Paris, format conférence élargi au-delà des ateliers habituels en petits groupes.", url:"https://www.meetup.com/fr-fr/school_of_product/", themes:["pm","design"] },
+  { id:"2", type:"conference", title:"School of Product #9 — HUM(AI)N", date:"17 novembre 2026", dateISO:"2026-11-17", loc:"Pavillon Chesnaie du Roy, 75012 Paris", desc:"Conférence annuelle organisée par OCTO Technology : « faut-il parier sur les humains ou les agents ? ». Plus de 300 participants attendus, billetterie ouverte.", url:"https://blog.octo.com/la-billetterie-pour-la-school-of-product-du-17-novembre-2026-est-ouverte-!", themes:["pm","design","ia"] },
   { id:"3", type:"meetup", title:"ProductTank Paris (groupe)", date:"Agenda récurrent — à vérifier sur Meetup", dateISO:"", loc:"Paris", desc:"Meetup produit de référence à Paris : talks d'invités sur le product management, le product design et l'UX, suivis d'un networking.", url:"https://www.meetup.com/producttank-paris/", themes:["pm","design"] },
   { id:"4", type:"meetup", title:"Product Faculty Paris", date:"Agenda récurrent — à vérifier sur Meetup", dateISO:"", loc:"Paris", desc:"Série d'événements pour connecter la communauté produit parisienne : metrics, stratégie produit, growth, UX for PMs, continuous discovery.", url:"https://www.meetup.com/product-faculty-paris/", themes:["pm"] },
   { id:"5", type:"meetup", title:"FrenchProduit Paris (ex-LPCx Paris)", date:"Agenda récurrent — à vérifier sur Meetup", dateISO:"", loc:"Paris", desc:"Communauté active de passionnés de création produit (PM, PO, designers, marketers, ops) — 78 événements organisés à ce jour, sujets récents : stratégie IA, onboarding à l'ère agentique.", url:"https://www.meetup.com/laproductconf-x/", themes:["pm","ia"] },
@@ -241,6 +243,13 @@ const DEFAULT_EVENTS = [
   { id:"9", type:"meetup", title:"Star d'UX .Paris", date:"Agenda récurrent — à vérifier sur Meetup", dateISO:"", loc:"Paris", desc:"Communauté des professionnels UX de Paris : soirées thématiques avec deux experts invités, suivies de networking.", url:"https://www.meetup.com/star-dux/", themes:["design"] },
   { id:"10", type:"meetup", title:"School of Product Paris (ateliers réguliers)", date:"Agenda récurrent — à vérifier sur Meetup", dateISO:"", loc:"Paris, souvent chez OCTO Technology", desc:"Ateliers en petits groupes (30 personnes max) : 20-30 min de théorie suivis d'exercices pratiques, puis apéro networking.", url:"https://www.meetup.com/fr-fr/school_of_product/", themes:["pm","design"] },
   { id:"11", type:"meetup", title:"Design Systems France (Paris)", date:"Agenda récurrent — à vérifier sur Meetup", dateISO:"", loc:"Paris", desc:"Communauté dédiée aux « builders » de Design Systems dans l'écosystème français — ateliers et talks.", url:"https://www.meetup.com/designsystemsfrance-paris/", themes:["design"] },
+  { id:"34", type:"meetup", title:"[Flupa Paris] Apéro escalade UX", date:"7 juillet 2026, 20h00", dateISO:"2026-07-07", loc:"Climb Up Aubervilliers (région parisienne)", desc:"Afterwork networking entre professionnels UX autour de l'escalade, organisé par l'association Flupa.", url:"https://www.eventbrite.fr/o/flupa-paris-63940420643", themes:["design"] },
+  { id:"35", type:"meetup", title:"The Agentic GTM Hackathon", date:"9 juillet 2026, 8h30-20h00", dateISO:"2026-07-09", loc:"Station F, Open Platform, Paris", desc:"Hackathon organisé par Anthropic, FullEnrich et Sillage sur les agents IA appliqués au go-to-market.", url:"https://stationf.co/events", themes:["ia"] },
+  { id:"36", type:"meetup", title:"IA : de l'initiative émergente au déploiement sécurisé à l'échelle", date:"9 septembre 2026, 9h00", dateISO:"2026-09-09", loc:"Station F, Paris", desc:"Événement en français sur le passage de l'IA en phase pilote à un déploiement sécurisé à grande échelle en entreprise.", url:"https://stationf.co/events", themes:["ia"] },
+  { id:"37", type:"meetup", title:"Montez à bord de l'ISS : IA, Souveraineté, Sécurité", date:"8 octobre 2026, 13h-21h", dateISO:"2026-10-08", loc:"Station F, Open Platform, Paris", desc:"Événement plus institutionnel que produit, sur les enjeux de souveraineté et de sécurité liés à l'IA.", url:"https://stationf.co/events", themes:["ia"] },
+  { id:"38", type:"conference", title:"ai-PULSE 2026 by Scaleway", date:"13 octobre 2026, 8h-22h", dateISO:"2026-10-13", loc:"Station F, Open Platform, Paris", desc:"Conférence technique sur l'IA organisée par Scaleway.", url:"https://stationf.co/events", themes:["ia"] },
+  { id:"39", type:"meetup", title:"Data & AI Product Management Paris", date:"Agenda récurrent — à vérifier sur Luma", dateISO:"", loc:"Paris", desc:"Communauté internationale (chapitres Paris/Londres/Barcelone) dédiée aux Product Managers Data & IA.", url:"https://luma.com/paris-dpm-meetup", themes:["pm","ia"] },
+  { id:"40", type:"meetup", title:"Thiga Events & Community", date:"Agenda récurrent — à vérifier sur Luma", dateISO:"", loc:"Paris", desc:"Communauté produit et design animée par Thiga (cabinet de conseil), plus de 50 000 pros produit/design, organisatrice historique de La Product Conf.", url:"https://luma.com/thiga", themes:["pm","design"] },
 
   { id:"28", type:"webinar", title:"SVPG Product Masterclass", date:"7-9 juillet 2026, 8h-13h PDT (~17h-22h Paris)", dateISO:"2026-07-07", loc:"En ligne (Zoom) — Silicon Valley Product Group", desc:"Cours interactif de 3 jours sur les fondamentaux du product management moderne : stratégie, découverte produit, et impact de l'IA générative sur le métier de PM.", url:"https://www.eventbrite.com/e/svpg-product-masterclass-tickets-1989265821622", themes:["pm","ia"] },
   { id:"29", type:"webinar", title:"Agent Analytics — Stop Measuring AI Activity. Start Measuring AI Impact.", date:"15 juillet 2026", dateISO:"2026-07-15", loc:"En ligne — Amplitude", desc:"Amplitude présente « Agent Analytics », qui relie la qualité des agents IA aux métriques de conversion, rétention et revenu.", url:"https://amplitude.com/events", themes:["ia","pm"] },
@@ -266,7 +275,7 @@ const DEFAULT_EVENTS = [
   { id:"27", type:"replay", title:"ProductTank Barcelona — AI Edition", date:"", dateISO:"", loc:"Barcelone (référence proche)", desc:"Édition spéciale IA de ProductTank, référence pour approfondir le sujet IA x Produit.", url:"https://www.youtube.com/watch?v=0qBRlphuGTA", themes:["ia","pm"] }
 ];
 
-const SK = "jb_paris_product_events_v3";
+const SK = "jb_paris_product_events_v4";
 function loadState() {
   try { const s = localStorage.getItem(SK); if (s) return JSON.parse(s); } catch(e) {}
   return { events: DEFAULT_EVENTS };
@@ -291,7 +300,7 @@ function buildNav() {
   nav.appendChild(lbl);
   Object.entries(TYPES).forEach(([key,cfg]) => nav.appendChild(makeNavBtn(key, cfg.label+"s", cfg.color)));
   const foot = document.createElement("div"); foot.className="nav-foot";
-  foot.textContent = "Sourcé le 03/07/2026. Les meetups récurrents (agenda non publié à l'avance) sont à revérifier tous les 2-3 semaines sur Meetup.";
+  foot.innerHTML = "Sourcé le 03/07/2026. Les meetups récurrents (agenda non publié à l'avance) sont à revérifier tous les 2-3 semaines sur Meetup et Luma.<br><br>Ressource : <a href=\"https://www.le-ticket.fr/events/\" target=\"_blank\" rel=\"noopener\">Le Ticket — agenda produit</a>, média/newsletter product management (7 500+ abonnés).";
   nav.appendChild(foot);
 }
 function makeNavBtn(filter, label, dot) {
