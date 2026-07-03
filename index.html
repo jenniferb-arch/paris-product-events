@@ -743,11 +743,12 @@ document.getElementById("btn-quick-save").addEventListener("click", ()=>{
   let url = document.getElementById("f-quick-url").value.trim();
   if (!url) { document.getElementById("f-quick-url").focus(); toast("Colle un lien avant d'ajouter."); return; }
   if (!/^https?:\/\//i.test(url)) url = "https://" + url;
-  const data = { id:uid(), title:titleFromUrl(url), type:"meetup_physique", date:"", dateISO:"", loc:"", desc:"", url, themes:[] };
+  const type = TYPES[activeType] ? activeType : "meetup_physique";
+  const data = { id:uid(), title:titleFromUrl(url), type, date:"", dateISO:"", loc:"", desc:"", url, themes:[] };
   state.events = [data, ...state.events];
   saveState(); buildNav(); render();
   document.getElementById("overlay-add").classList.remove("open");
-  toast("Contenu ajouté ✓");
+  toast(`Ajouté dans « ${TYPES[type].label} » ✓`);
 });
 document.getElementById("f-quick-url").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); document.getElementById("btn-quick-save").click(); } });
 
