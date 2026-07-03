@@ -39,14 +39,14 @@
     .nav-icon { font-size: 13px; width: 16px; text-align: center; flex-shrink: 0; }
     .nav-count { margin-left: auto; font-size: 11px; background: var(--surface2); color: var(--text2); border-radius: 99px; padding: 1px 7px; }
     .nav-btn.active .nav-count { background: var(--accent-bg); color: var(--accent); }
-    .nav-foot { margin-top: auto; font-size: 10px; color: var(--text3); line-height: 1.5; padding: 0 6px; }
-    .nav-foot a { color: var(--accent); text-decoration: none; font-weight: 500; }
-    .nav-foot a:hover { text-decoration: underline; }
 
     main { flex: 1; padding: 2.25rem 2rem 4rem; min-width: 0; }
-    .hero { margin-bottom: 1.5rem; }
+    .hero { padding: 2.25rem 2rem 0; }
     .hero h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 4px; }
     .hero p { font-size: 14px; color: var(--text2); }
+    .page-foot { padding: 1.5rem 2rem 2.5rem; font-size: 11px; color: var(--text3); line-height: 1.6; border-top: 0.5px solid var(--border); }
+    .page-foot a { color: var(--accent); text-decoration: none; font-weight: 500; }
+    .page-foot a:hover { text-decoration: underline; }
     .topbar { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap; row-gap: 10px; }
     .search-wrap { flex: 1 1 220px; max-width: 320px; position: relative; }
     .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: var(--text3); pointer-events: none; }
@@ -171,10 +171,11 @@
       .nav-scroll { flex-direction: row; overflow-x: auto; align-items: center; gap: 6px; padding-bottom: 2px; -webkit-overflow-scrolling: touch; mask-image: linear-gradient(to right, transparent 0, black 16px, black calc(100% - 16px), transparent 100%); -webkit-mask-image: linear-gradient(to right, transparent 0, black 16px, black calc(100% - 16px), transparent 100%); }
       .nav-scroll .nav-lbl { display: none; }
       .nav-scroll .nav-btn { width: auto; white-space: nowrap; padding: 7px 10px; }
-      .nav-foot { margin-top: 1rem; }
       main { padding: 1.5rem 1rem 3rem; }
+      .hero { padding: 1.5rem 1rem 0; }
       .hero h1 { font-size: 21px; }
       .hero p { font-size: 13px; }
+      .page-foot { padding: 1.25rem 1rem 2rem; }
       .search-wrap { max-width: none; flex: 1 1 100%; }
       .btn-new { margin-left: 0; flex: 1 1 100%; justify-content: center; }
       .grid, .fav-grid { grid-template-columns: 1fr; }
@@ -195,6 +196,10 @@
   </style>
 </head>
 <body>
+<div class="hero">
+  <h1>Ne rate plus rien du Produit</h1>
+  <p>Meetups, webinars, podcasts et replays sur le Product Management, l'IA et le Product Design — curés pour toi.</p>
+</div>
 <div class="layout">
   <nav id="nav">
     <div class="nav-brand">
@@ -203,10 +208,6 @@
     </div>
   </nav>
   <main>
-    <div class="hero">
-      <h1>Ne rate plus rien du Produit</h1>
-      <p>Meetups, webinars, podcasts et replays sur le Product Management, l'IA et le Product Design — curés pour toi.</p>
-    </div>
     <div class="topbar">
       <div class="search-wrap">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -221,6 +222,12 @@
     <div id="view"></div>
   </main>
 </div>
+
+<footer class="page-foot">
+  Sourcé le 03/07/2026. Les meetups récurrents (agenda non publié à l'avance) sont à revérifier tous les 2-3 semaines sur Meetup et Luma.
+  <br><br>
+  Ressource : <a href="https://www.le-ticket.fr/events/" target="_blank" rel="noopener">Le Ticket — agenda produit</a>, média/newsletter product management (7 500+ abonnés).
+</footer>
 
 <!-- Quick add: just a link -->
 <div class="overlay" id="overlay-add">
@@ -478,16 +485,13 @@ function toast(msg) {
 
 function buildNav() {
   const nav = document.getElementById("nav");
-  nav.querySelectorAll(".nav-scroll,.nav-foot").forEach(el => el.remove());
+  nav.querySelectorAll(".nav-scroll").forEach(el => el.remove());
   const scroll = document.createElement("div"); scroll.className = "nav-scroll";
   scroll.appendChild(makeNavBtn("all", "Tous les événements"));
   const lbl = document.createElement("div"); lbl.className="nav-lbl"; lbl.textContent="Typologie";
   scroll.appendChild(lbl);
   Object.entries(TYPES).forEach(([key,cfg]) => scroll.appendChild(makeNavBtn(key, cfg.label, cfg.icon)));
   nav.appendChild(scroll);
-  const foot = document.createElement("div"); foot.className="nav-foot";
-  foot.innerHTML = "Sourcé le 03/07/2026. Les meetups récurrents (agenda non publié à l'avance) sont à revérifier tous les 2-3 semaines sur Meetup et Luma.<br><br>Ressource : <a href=\"https://www.le-ticket.fr/events/\" target=\"_blank\" rel=\"noopener\">Le Ticket — agenda produit</a>, média/newsletter product management (7 500+ abonnés).";
-  nav.appendChild(foot);
 }
 function makeNavBtn(filter, label, icon) {
   const b = document.createElement("button");
