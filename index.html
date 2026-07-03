@@ -78,25 +78,10 @@
     .card-cta:hover { background: var(--accent); color: #fff; }
     .empty { grid-column: 1/-1; text-align: center; padding: 3rem 2rem; color: var(--text3); font-size: 14px; }
 
-    /* Calendar */
-    .cal-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
-    .cal-nav { display: flex; align-items: center; gap: 8px; }
-    .cal-nav button { width: 30px; height: 30px; border-radius: 8px; border: 0.5px solid var(--border-md); background: var(--surface); cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text2); }
-    .cal-nav button:hover { background: var(--surface2); }
-    .cal-nav svg { width: 14px; height: 14px; }
-    .cal-title { font-size: 15px; font-weight: 600; text-transform: capitalize; min-width: 150px; text-align: center; }
-    .btn-today { font-size: 12px; padding: 6px 12px; border-radius: var(--rs); border: 0.5px solid var(--border-md); background: var(--surface); cursor: pointer; color: var(--text2); }
-    .btn-today:hover { background: var(--surface2); }
-
-    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 1.5rem; max-width: 560px; }
-    .cal-weekday { font-size: 9px; font-weight: 600; color: var(--text3); text-transform: uppercase; text-align: center; padding-bottom: 3px; }
-    .cal-day { height: 40px; border-radius: 8px; border: 0.5px solid var(--border); background: var(--surface); padding: 4px 5px; display: flex; flex-direction: column; align-items: center; gap: 2px; }
-    .cal-day.out { opacity: .3; }
-    .cal-day.today { border-color: var(--accent); }
-    .cal-day.today .cal-daynum { color: var(--accent); font-weight: 700; }
-    .cal-daynum { font-size: 11px; color: var(--text2); font-weight: 500; }
-    .cal-dots { display: flex; gap: 2px; }
-    .cal-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+    .month-select-row { display: flex; align-items: center; gap: 8px; margin-bottom: 1.25rem; }
+    .month-select-row label { font-size: 12px; font-weight: 500; color: var(--text2); }
+    .month-select-row select { font-size: 13px; padding: 7px 10px; border-radius: var(--rs); border: 0.5px solid var(--border-md); background: var(--surface); color: var(--text1); outline: none; cursor: pointer; }
+    .month-select-row select:focus { border-color: var(--accent); }
 
     .subsection { margin-top: 1.5rem; max-width: 720px; }
     .subsection-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: .7rem; }
@@ -229,7 +214,6 @@ const THEMES = {
   design: { label:"Product Design",     dot:"#BA7517" }
 };
 const CAL_TYPES = Object.keys(TYPES).filter(k=>TYPES[k].calendar);
-const WEEKDAYS = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
 
 const DEFAULT_EVENTS = [
   { id:"1", type:"meetup", title:"ProductTank Paris — Designing for Adoption: Turning AI Strategy Into Live Value", date:"24 septembre 2026, 19h00", dateISO:"2026-09-24", loc:"5 Degrés Paris, 12 rue de la Bourse, 75002 Paris", desc:"Kevin Stewart (Format-3) présente un cadre pour transformer une stratégie IA en valeur concrète ; retour d'expérience de transformation IA par l'équipe de 5 Degrés. Format bilingue, suivi d'un apéro networking.", url:"https://www.meetup.com/producttank-paris/", themes:["pm","ia"] },
@@ -250,6 +234,8 @@ const DEFAULT_EVENTS = [
   { id:"38", type:"conference", title:"ai-PULSE 2026 by Scaleway", date:"13 octobre 2026, 8h-22h", dateISO:"2026-10-13", loc:"Station F, Open Platform, Paris", desc:"Conférence technique sur l'IA organisée par Scaleway.", url:"https://stationf.co/events", themes:["ia"] },
   { id:"39", type:"meetup", title:"Data & AI Product Management Paris", date:"Agenda récurrent — à vérifier sur Luma", dateISO:"", loc:"Paris", desc:"Communauté internationale (chapitres Paris/Londres/Barcelone) dédiée aux Product Managers Data & IA.", url:"https://luma.com/paris-dpm-meetup", themes:["pm","ia"] },
   { id:"40", type:"meetup", title:"Thiga Events & Community", date:"Agenda récurrent — à vérifier sur Luma", dateISO:"", loc:"Paris", desc:"Communauté produit et design animée par Thiga (cabinet de conseil), plus de 50 000 pros produit/design, organisatrice historique de La Product Conf.", url:"https://luma.com/thiga", themes:["pm","design"] },
+  { id:"41", type:"meetup", title:"« Le Grand Rattrapage » — AI @ Alan : scaler un produit IA pour 800k users", date:"7 juillet 2026, 12h00", dateISO:"2026-07-07", loc:"En ligne", desc:"Antoine Lizée (Head of Health AI chez Alan) présente Mo, compagnon santé propulsé par l'IA : validation scientifique, démo produit, human-in-the-loop et sécurité médicale à l'échelle de 800 000 utilisateurs. Session mensuelle de la communauté The Product Crew.", url:"https://www.meetup.com/fr-fr/theproductcrew/events/315424885/", themes:["pm","ia"] },
+  { id:"42", type:"meetup", title:"The Product Crew (TPC)", date:"Agenda récurrent — à vérifier sur Meetup", dateISO:"", loc:"Paris / en ligne", desc:"Communauté produit organisant des sessions mensuelles (« Le Grand Rattrapage ») avec des retours d'expérience concrets de praticiens produit et IA.", url:"https://www.meetup.com/fr-fr/theproductcrew/", themes:["pm","ia"] },
 
   { id:"28", type:"webinar", title:"SVPG Product Masterclass", date:"7-9 juillet 2026, 8h-13h PDT (~17h-22h Paris)", dateISO:"2026-07-07", loc:"En ligne (Zoom) — Silicon Valley Product Group", desc:"Cours interactif de 3 jours sur les fondamentaux du product management moderne : stratégie, découverte produit, et impact de l'IA générative sur le métier de PM.", url:"https://www.eventbrite.com/e/svpg-product-masterclass-tickets-1989265821622", themes:["pm","ia"] },
   { id:"29", type:"webinar", title:"Agent Analytics — Stop Measuring AI Activity. Start Measuring AI Impact.", date:"15 juillet 2026", dateISO:"2026-07-15", loc:"En ligne — Amplitude", desc:"Amplitude présente « Agent Analytics », qui relie la qualité des agents IA aux métriques de conversion, rétention et revenu.", url:"https://amplitude.com/events", themes:["ia","pm"] },
@@ -275,7 +261,7 @@ const DEFAULT_EVENTS = [
   { id:"27", type:"replay", title:"ProductTank Barcelona — AI Edition", date:"", dateISO:"", loc:"Barcelone (référence proche)", desc:"Édition spéciale IA de ProductTank, référence pour approfondir le sujet IA x Produit.", url:"https://www.youtube.com/watch?v=0qBRlphuGTA", themes:["ia","pm"] }
 ];
 
-const SK = "jb_paris_product_events_v4";
+const SK = "jb_paris_product_events_v5";
 function loadState() {
   try { const s = localStorage.getItem(SK); if (s) return JSON.parse(s); } catch(e) {}
   return { events: DEFAULT_EVENTS };
@@ -290,7 +276,7 @@ let activeTheme = "all";
 let searchQ = "";
 let editingId = null;
 let selectedThemes = [];
-let calCursor = (()=>{ const n=new Date(); return new Date(n.getFullYear(), n.getMonth(), 1); })();
+let monthFilter = "all";
 
 function buildNav() {
   const nav = document.getElementById("nav");
@@ -377,7 +363,7 @@ function render() {
 
   if (searchQ) { renderListView(view, filtered, "Résultats de recherche"); return; }
   if (isListType) { renderListView(view, filtered, TYPES[activeType].label+"s"); return; }
-  renderCalendarView(view, filtered);
+  renderDatedView(view, filtered);
 }
 
 function renderListView(view, list, title) {
@@ -409,43 +395,38 @@ function rowsInto(container, list, emptyMsg, opts) {
   list.forEach(p => container.appendChild(eventRow(p, opts)));
 }
 
-function renderCalendarView(view, filtered) {
+function monthKey(iso) { return iso.slice(0,7); }
+function monthLabelFromKey(key) {
+  const [y,m] = key.split('-').map(Number);
+  return new Date(y, m-1, 1).toLocaleDateString('fr-FR', { month:'long', year:'numeric' });
+}
+
+function renderDatedView(view, filtered) {
   const calItems = filtered.filter(p => CAL_TYPES.includes(p.type) && p.dateISO);
   const recurItems = filtered.filter(p => CAL_TYPES.includes(p.type) && !p.dateISO)
     .sort((a,b)=>a.title.localeCompare(b.title));
 
-  const year = calCursor.getFullYear(), month = calCursor.getMonth();
-  const monthLabel = calCursor.toLocaleDateString('fr-FR', { month:'long', year:'numeric' });
-  const today = new Date(); const todayISO = toISO(today);
-  const monthPrefix = `${year}-${String(month+1).padStart(2,'0')}`;
-  const monthList = calItems.filter(e => e.dateISO.startsWith(monthPrefix)).sort((a,b)=>a.dateISO.localeCompare(b.dateISO));
-
-  const first = new Date(year, month, 1);
-  const startWeekday = (first.getDay()+6)%7;
-  const daysInMonth = new Date(year, month+1, 0).getDate();
-  const daysInPrevMonth = new Date(year, month, 0).getDate();
-  const cells = [];
-  for (let i=startWeekday-1; i>=0; i--) cells.push({ d:new Date(year, month-1, daysInPrevMonth-i), out:true });
-  for (let d=1; d<=daysInMonth; d++) cells.push({ d:new Date(year, month, d), out:false });
-  while (cells.length < 42) { const last=cells[cells.length-1].d; cells.push({ d:new Date(last.getFullYear(), last.getMonth(), last.getDate()+1), out:true }); }
+  const months = [...new Set(calItems.map(p=>monthKey(p.dateISO)))].sort();
+  if (monthFilter !== "all" && !months.includes(monthFilter)) {
+    const curKey = monthKey(toISO(new Date()));
+    monthFilter = months.includes(curKey) ? curKey : "all";
+  }
+  const shownList = (monthFilter==="all" ? calItems.slice() : calItems.filter(p=>monthKey(p.dateISO)===monthFilter))
+    .sort((a,b)=>a.dateISO.localeCompare(b.dateISO));
 
   view.innerHTML = `
-    <div class="cal-header">
-      <div class="cal-nav">
-        <button id="cal-prev" title="Mois précédent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg></button>
-        <div class="cal-title">${monthLabel}</div>
-        <button id="cal-next" title="Mois suivant"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg></button>
-      </div>
-      <button class="btn-today" id="cal-today">Aujourd'hui</button>
+    <div class="month-select-row">
+      <label for="month-select">Mois</label>
+      <select id="month-select">
+        <option value="all"${monthFilter==="all"?" selected":""}>Tous les mois</option>
+        ${months.map(k=>`<option value="${k}"${k===monthFilter?" selected":""}>${monthLabelFromKey(k)}</option>`).join("")}
+      </select>
     </div>
-    <div class="cal-grid" id="cal-grid"></div>
-    <div class="subsection">
-      <div class="subsection-head">
-        <h3>Événements du mois</h3>
-        <span>${monthList.length} résultat${monthList.length>1?"s":""}</span>
-      </div>
-      <div class="recur-list" id="month-list"></div>
+    <div class="section-head">
+      <h2>${monthFilter==="all" ? "Tous les événements datés" : monthLabelFromKey(monthFilter)}</h2>
+      <span>${shownList.length ? shownList.length+" résultat"+(shownList.length>1?"s":"") : ""}</span>
     </div>
+    <div class="grid" id="dated-grid"></div>
     <div class="subsection">
       <div class="subsection-head">
         <h3>Meetups récurrents — agenda à vérifier chaque mois</h3>
@@ -454,24 +435,10 @@ function renderCalendarView(view, filtered) {
       <div class="recur-list" id="recur-list"></div>
     </div>`;
 
-  const grid = document.getElementById("cal-grid");
-  WEEKDAYS.forEach(w => { const el=document.createElement("div"); el.className="cal-weekday"; el.textContent=w; grid.appendChild(el); });
-  cells.forEach(cell => {
-    const iso = toISO(cell.d);
-    const dayEvents = calItems.filter(e => e.dateISO === iso);
-    const el = document.createElement("div");
-    el.className = "cal-day" + (cell.out?" out":"") + (iso===todayISO?" today":"");
-    const dots = dayEvents.slice(0,3).map(e => `<span class="cal-dot" style="background:${(TYPES[e.type]||{}).color||'#888'}"></span>`).join("");
-    el.innerHTML = `<span class="cal-daynum">${cell.d.getDate()}</span><div class="cal-dots">${dots}</div>`;
-    grid.appendChild(el);
-  });
-
-  rowsInto(document.getElementById("month-list"), monthList, "Aucun événement daté ce mois-ci. Regardez les récurrents ci-dessous, ou changez de mois.", { showDate:true });
+  cardsInto(document.getElementById("dated-grid"), shownList, "Aucun événement daté pour ce mois.");
   rowsInto(document.getElementById("recur-list"), recurItems, "Aucun meetup récurrent pour ce filtre.");
 
-  document.getElementById("cal-prev").addEventListener("click", ()=>{ calCursor=new Date(year,month-1,1); render(); });
-  document.getElementById("cal-next").addEventListener("click", ()=>{ calCursor=new Date(year,month+1,1); render(); });
-  document.getElementById("cal-today").addEventListener("click", ()=>{ const n=new Date(); calCursor=new Date(n.getFullYear(),n.getMonth(),1); render(); });
+  document.getElementById("month-select").addEventListener("change", e=>{ monthFilter=e.target.value; render(); });
 }
 
 function populateTypeSelect() {
