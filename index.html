@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paris Product Events — Meetups, Webinars, Podcasts &amp; Replays</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f6f5f2; --surface: #fff; --surface2: #f0efe9;
+      --border: rgba(0,0,0,0.09); --border-md: rgba(0,0,0,0.16);
+      --text1: #18181a; --text2: #6b6a66; --text3: #a8a7a2;
+      --accent: #534AB7; --accent-bg: #EEEDFE;
+      --danger: #D85A30; --danger-bg: #FAECE7;
+      --r: 14px; --rs: 9px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #18181a; --surface: #222224; --surface2: #2a2a2c;
+        --border: rgba(255,255,255,0.08); --border-md: rgba(255,255,255,0.16);
+        --text1: #f0efea; --text2: #9a9994; --text3: #5a5a56;
+        --accent: #AFA9EC; --accent-bg: #26215C;
+        --danger: #F09595; --danger-bg: #501313;
+      }
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text1); min-height: 100vh; }
+
+    .layout { display: flex; min-height: 100vh; }
+    nav { width: 220px; flex-shrink: 0; background: var(--surface); border-right: 0.5px solid var(--border); padding: 1.75rem 1rem; display: flex; flex-direction: column; gap: 2px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+    .nav-brand { display: flex; align-items: center; gap: 9px; margin-bottom: 1.5rem; }
+    .nav-av { width: 32px; height: 32px; border-radius: 50%; background: var(--accent-bg); display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--accent); flex-shrink: 0; }
+    .nav-name { font-size: 13px; font-weight: 500; }
+    .nav-sub { font-size: 11px; color: var(--text2); }
+    .nav-lbl { font-size: 9px; font-weight: 600; color: var(--text3); letter-spacing: .09em; text-transform: uppercase; padding: 0 6px; margin: 1rem 0 4px; }
+    .nav-btn { display: flex; align-items: center; gap: 8px; padding: 7px 8px; border-radius: var(--rs); font-size: 13px; color: var(--text2); cursor: pointer; border: none; background: none; width: 100%; text-align: left; transition: background .12s, color .12s; }
+    .nav-btn:hover { background: var(--surface2); color: var(--text1); }
+    .nav-btn.active { background: var(--accent-bg); color: var(--accent); font-weight: 500; }
+    .nav-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .nav-count { margin-left: auto; font-size: 11px; background: var(--surface2); color: var(--text2); border-radius: 99px; padding: 1px 7px; }
+    .nav-btn.active .nav-count { background: var(--accent-bg); color: var(--accent); }
+    .nav-foot { margin-top: auto; font-size: 10px; color: var(--text3); line-height: 1.5; padding: 0 6px; }
+
+    main { flex: 1; padding: 2.25rem 2rem 4rem; min-width: 0; }
+    .topbar { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap; row-gap: 10px; }
+    .search-wrap { flex: 1 1 220px; max-width: 320px; position: relative; }
+    .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: var(--text3); pointer-events: none; }
+    #search { width: 100%; padding: 8px 10px 8px 32px; font-size: 13px; border: 0.5px solid var(--border-md); border-radius: var(--rs); background: var(--surface); color: var(--text1); outline: none; }
+    #search:focus { border-color: var(--accent); }
+    #search::placeholder { color: var(--text3); }
+    .theme-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+    .theme-chip { font-size: 12px; font-weight: 500; padding: 6px 12px; border-radius: 99px; border: 0.5px solid var(--border-md); background: var(--surface); color: var(--text2); cursor: pointer; white-space: nowrap; }
+    .theme-chip.active { background: var(--accent); color: #fff; border-color: transparent; }
+    .btn-new { display: flex; align-items: center; gap: 6px; padding: 8px 14px; font-size: 13px; font-weight: 500; background: var(--accent); color: #fff; border: none; border-radius: var(--rs); cursor: pointer; margin-left: auto; transition: opacity .15s; white-space: nowrap; }
+    .btn-new:hover { opacity: .88; }
+    .btn-new svg { width: 14px; height: 14px; }
+
+    .section-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 1.1rem; }
+    .section-head h2 { font-size: 15px; font-weight: 500; }
+    .section-head span { font-size: 13px; color: var(--text3); }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 13px; }
+    .card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--r); padding: 1.1rem; display: flex; flex-direction: column; gap: 10px; position: relative; transition: border-color .15s, transform .12s; }
+    .card:hover { border-color: var(--border-md); transform: translateY(-2px); }
+    .card:hover .card-edit { opacity: 1; }
+    .card-edit { position: absolute; top: 10px; right: 10px; width: 26px; height: 26px; border-radius: 7px; background: var(--surface2); border: 0.5px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; transition: opacity .15s; z-index: 1; }
+    .card-edit svg { width: 12px; height: 12px; color: var(--text2); }
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; padding-right: 26px; }
+    .type-badge { font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 99px; text-transform: uppercase; letter-spacing: .03em; white-space: nowrap; }
+    .card-date { font-size: 11px; color: var(--text3); text-align: right; }
+    .card-title { font-size: 14px; font-weight: 500; line-height: 1.4; }
+    .card-loc { font-size: 11px; color: var(--text3); display: flex; align-items: center; gap: 4px; }
+    .card-desc { font-size: 12px; color: var(--text2); line-height: 1.6; flex: 1; }
+    .card-footer { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
+    .badge { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 99px; }
+    .card-cta { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; padding: 8px 12px; border-radius: var(--rs); background: var(--surface2); color: var(--text1); text-decoration: none; margin-top: 2px; transition: background .12s; }
+    .card-cta:hover { background: var(--accent); color: #fff; }
+    .empty { grid-column: 1/-1; text-align: center; padding: 4rem 2rem; color: var(--text3); font-size: 14px; }
+
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.38); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 1rem; opacity: 0; pointer-events: none; transition: opacity .18s; }
+    .overlay.open { opacity: 1; pointer-events: all; }
+    .modal { background: var(--surface); border-radius: 16px; width: 100%; max-width: 460px; padding: 1.75rem; display: flex; flex-direction: column; gap: 1.1rem; max-height: 90vh; overflow-y: auto; transform: translateY(14px); transition: transform .2s; }
+    .overlay.open .modal { transform: translateY(0); }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; }
+    .modal-header h3 { font-size: 16px; font-weight: 500; }
+    .modal-close { width: 28px; height: 28px; border-radius: 7px; background: var(--surface2); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text2); }
+    .modal-close svg { width: 14px; height: 14px; }
+
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field label { font-size: 12px; font-weight: 500; color: var(--text2); }
+    .field input, .field textarea, .field select { padding: 9px 11px; font-size: 13px; border: 0.5px solid var(--border-md); border-radius: var(--rs); background: var(--surface2); color: var(--text1); outline: none; font-family: inherit; resize: none; transition: border-color .15s; }
+    .field input:focus, .field textarea:focus, .field select:focus { border-color: var(--accent); background: var(--surface); }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .tags-wrap { display: flex; gap: 7px; flex-wrap: wrap; }
+    .tag-chip { display: flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 99px; font-size: 12px; font-weight: 500; border: 0.5px solid var(--border-md); background: var(--surface2); color: var(--text2); cursor: pointer; transition: all .12s; user-select: none; }
+    .chip-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+    .modal-actions { display: flex; gap: 8px; padding-top: 4px; }
+    .btn-save { flex: 1; padding: 10px; font-size: 14px; font-weight: 500; background: var(--accent); color: #fff; border: none; border-radius: var(--rs); cursor: pointer; transition: opacity .15s; }
+    .btn-save:hover { opacity: .88; }
+    .btn-delete { padding: 10px 14px; font-size: 13px; background: var(--danger-bg); color: var(--danger); border: none; border-radius: var(--rs); cursor: pointer; }
+    .btn-delete:hover { opacity: .8; }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <nav id="nav">
+    <div class="nav-brand">
+      <div class="nav-av">📅</div>
+      <div><div class="nav-name">Paris Product Events</div><div class="nav-sub">Meetups · Webinars · Podcasts</div></div>
+    </div>
+  </nav>
+  <main>
+    <div class="topbar">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input id="search" type="text" placeholder="Rechercher…" autocomplete="off" />
+      </div>
+      <div class="theme-chips" id="theme-chips"></div>
+      <button class="btn-new" id="btn-new">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+        Ajouter
+      </button>
+    </div>
+    <div class="section-head"><h2 id="sec-title">Tous les événements</h2><span id="sec-count"></span></div>
+    <div class="grid" id="grid"></div>
+  </main>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <h3 id="modal-title">Nouvel événement</h3>
+      <button class="modal-close" id="modal-close" aria-label="Fermer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="field">
+      <label>Titre</label>
+      <input id="f-title" type="text" placeholder="Nom de l'événement / épisode" />
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Type</label>
+        <select id="f-type">
+          <option value="meetup">Meetup</option>
+          <option value="webinar">Webinar</option>
+          <option value="podcast">Podcast</option>
+          <option value="replay">Replay</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Date</label>
+        <input id="f-date" type="text" placeholder="ex: 24 sept. 2026 ou Récurrent" />
+      </div>
+    </div>
+    <div class="field">
+      <label>Lieu / source</label>
+      <input id="f-loc" type="text" placeholder="Paris, En ligne, nom du podcast…" />
+    </div>
+    <div class="field">
+      <label>Description</label>
+      <textarea id="f-desc" rows="2" placeholder="Courte description…"></textarea>
+    </div>
+    <div class="field">
+      <label>Lien (inscription / écoute / replay)</label>
+      <input id="f-url" type="text" placeholder="https://…" />
+    </div>
+    <div class="field">
+      <label>Thèmes</label>
+      <div class="tags-wrap" id="tags-wrap"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-delete" id="btn-delete" style="display:none">Supprimer</button>
+      <button class="btn-save" id="btn-save">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const TYPES = {
+  meetup:  { label:"Meetup",  color:"#26215C", bg:"#EEEDFE", cta:"S'inscrire" },
+  webinar: { label:"Webinar", color:"#042C53", bg:"#E6F1FB", cta:"S'inscrire" },
+  podcast: { label:"Podcast", color:"#4A1B0C", bg:"#FAECE7", cta:"Écouter" },
+  replay:  { label:"Replay",  color:"#085041", bg:"#E1F5EE", cta:"Regarder" }
+};
+const THEMES = {
+  pm:     { label:"Product Management", color:"#26215C", bg:"#EEEDFE", dot:"#534AB7" },
+  ia:     { label:"IA",                 color:"#4B1528", bg:"#FBEAF0", dot:"#D4537E" },
+  design: { label:"Product Design",     color:"#633806", bg:"#FAEEDA", dot:"#BA7517" }
+};
+
+const DEFAULT_EVENTS = [
+  { id:"1", type:"meetup", title:"ProductTank Paris — Designing for Adoption: Turning AI Strategy Into Live Value", date:"24 septembre 2026, 19h00", loc:"5 Degrés Paris, 12 rue de la Bourse, 75002 Paris", desc:"Kevin Stewart (Format-3) présente un cadre pour transformer une stratégie IA en valeur concrète ; retour d'expérience de transformation IA par l'équipe de 5 Degrés. Format bilingue, suivi d'un apéro networking.", url:"https://www.meetup.com/producttank-paris/", themes:["pm","ia"] },
+  { id:"2", type:"meetup", title:"La Conf — School of Product Paris", date:"17 novembre 2026", loc:"Pavillon Chesnaie du Roy, 75012 Paris", desc:"Événement phare annuel de School of Product Paris, format conférence élargi au-delà des ateliers habituels en petits groupes.", url:"https://www.meetup.com/fr-fr/school_of_product/", themes:["pm","design"] },
+  { id:"3", type:"meetup", title:"ProductTank Paris (groupe)", date:"Agenda récurrent — à vérifier sur Meetup", loc:"Paris", desc:"Meetup produit de référence à Paris : talks d'invités sur le product management, le product design et l'UX, suivis d'un networking.", url:"https://www.meetup.com/producttank-paris/", themes:["pm","design"] },
+  { id:"4", type:"meetup", title:"Product Faculty Paris", date:"Agenda récurrent — à vérifier sur Meetup", loc:"Paris", desc:"Série d'événements pour connecter la communauté produit parisienne : metrics, stratégie produit, growth, UX for PMs, continuous discovery.", url:"https://www.meetup.com/product-faculty-paris/", themes:["pm"] },
+  { id:"5", type:"meetup", title:"FrenchProduit Paris (ex-LPCx Paris)", date:"Agenda récurrent — à vérifier sur Meetup", loc:"Paris", desc:"Communauté active de passionnés de création produit (PM, PO, designers, marketers, ops) — 78 événements organisés à ce jour, sujets récents : stratégie IA, onboarding à l'ère agentique.", url:"https://www.meetup.com/laproductconf-x/", themes:["pm","ia"] },
+  { id:"6", type:"meetup", title:"DesignOps Meetup Paris", date:"Agenda récurrent — à vérifier sur Meetup", loc:"58 bis rue de la Chaussée d'Antin, Paris", desc:"Rencontres sur les pratiques DesignOps, avec des intervenants qui partagent des retours d'expérience concrets.", url:"https://www.meetup.com/fr-fr/designops-meetup/", themes:["design"] },
+  { id:"7", type:"meetup", title:"AI Tinkerers Paris", date:"Agenda récurrent — à vérifier sur le site", loc:"Paris (lieu variable)", desc:"Communauté de builders IA (agents, RAG, multimodal, coding tools) — démos techniques live, pas de pitchs commerciaux.", url:"https://paris.aitinkerers.org/", themes:["ia"] },
+  { id:"8", type:"meetup", title:"Global AI Paris", date:"Agenda récurrent — à vérifier sur Meetup", loc:"Paris (lieu variable)", desc:"Rencontres autour de l'actualité IA et du networking, au sein du réseau international Global AI Community.", url:"https://www.meetup.com/fr-fr/global-ai-paris/", themes:["ia"] },
+  { id:"9", type:"meetup", title:"Star d'UX .Paris", date:"Agenda récurrent — à vérifier sur Meetup", loc:"Paris", desc:"Communauté des professionnels UX de Paris : soirées thématiques avec deux experts invités, suivies de networking.", url:"https://www.meetup.com/star-dux/", themes:["design"] },
+  { id:"10", type:"meetup", title:"School of Product Paris (ateliers réguliers)", date:"Agenda récurrent — à vérifier sur Meetup", loc:"Paris, souvent chez OCTO Technology", desc:"Ateliers en petits groupes (30 personnes max) : 20-30 min de théorie suivis d'exercices pratiques, puis apéro networking.", url:"https://www.meetup.com/fr-fr/school_of_product/", themes:["pm","design"] },
+  { id:"11", type:"meetup", title:"Design Systems France (Paris)", date:"Agenda récurrent — à vérifier sur Meetup", loc:"Paris", desc:"Communauté dédiée aux « builders » de Design Systems dans l'écosystème français — ateliers et talks.", url:"https://www.meetup.com/designsystemsfrance-paris/", themes:["design"] },
+
+  { id:"12", type:"webinar", title:"OCTO Academy — Devenir Product Manager", date:"Sessions récurrentes", loc:"Paris / à distance", desc:"Formation professionnelle sur le rôle de Product Manager, catalogue Product & Design d'OCTO Academy.", url:"https://www.octo.academy/catalogue/domaine/product-management/", themes:["pm"] },
+  { id:"13", type:"webinar", title:"Ironhack — AI Product Manager", date:"Sessions récurrentes, à distance", loc:"En ligne", desc:"Formation Product Manager orientée IA, à distance, avec accélérateur associant des startups partenaires.", url:"https://www.ironhack.com/fr/product-manager-ia/a-distance", themes:["pm","ia"] },
+
+  { id:"14", type:"podcast", title:"Dans la tête d'un PM — #7 Maïa Metz", date:"", loc:"Podcast — Thomas de Phuoc", desc:"Maïa Metz (BlaBlaCar, Aircall, fondatrice de Noé) raconte son parcours et sa façon de penser le produit.", url:"https://danslatetedunpm.substack.com/p/dans-la-tte-dun-pm-7-maa-metz-no", themes:["pm"] },
+  { id:"15", type:"podcast", title:"Product Squad — #43 20 ans de Product Management en France", date:"", loc:"Podcast — Axel Sooriah", desc:"Hugo Geissmann (Thiga) retrace l'évolution du métier de Product Manager en France sur deux décennies.", url:"https://open.spotify.com/show/4l3b5KXs07S5Yqp92OPxQv", themes:["pm"] },
+  { id:"16", type:"podcast", title:"Clef de voûte — 10 prédictions Product pour 2026", date:"", loc:"Podcast — Timothé Frin (Stellar)", desc:"Anticipe l'impact de l'IA sur le métier de PM et la fin annoncée du pricing par utilisateur.", url:"https://open.spotify.com/episode/3n8esULfXw9TkT3oWWv7dZ", themes:["pm","ia"] },
+  { id:"17", type:"podcast", title:"Parlons Design — #416 J'ai testé Claude Design", date:"", loc:"Podcast — Romain Penchenat", desc:"Romain Penchenat teste Claude Design et discute de son impact sur le métier de Product Designer.", url:"https://parlonsdesign.substack.com/p/416-jai-teste-claude-design-avis", themes:["design","ia"] },
+  { id:"18", type:"podcast", title:"Design+", date:"", loc:"Podcast", desc:"Podcast référence pour les designers UX/UI/Product : pratiques et conseils actionnables partagés par des pros.", url:"https://open.spotify.com/show/7jKE9V0OhhZNlkKAcYmuyY", themes:["design"] },
+  { id:"19", type:"podcast", title:"Salut les Designers !", date:"", loc:"Podcast — Agence LunaWeb", desc:"Podcast mensuel : tests UX, éco-conception, accessibilité, service design, avec un·e expert·e invité·e.", url:"https://podcasts.apple.com/fr/podcast/salut-les-designers/id1572173012", themes:["design"] },
+  { id:"20", type:"podcast", title:"Hymacast — #0042 Comprendre l'IA générative pour créer vos produits IA", date:"", loc:"Podcast — Hymaïa", desc:"Une Data Product Manager et un Lead Data Scientist d'Hymaïa décryptent l'IA générative appliquée à la construction produit.", url:"https://open.spotify.com/episode/5luYA9yqOBZUUdJqG6bIRH", themes:["ia","pm"] },
+  { id:"21", type:"podcast", title:"Lenny's Podcast — AI and product management", date:"", loc:"Podcast — Lenny Rachitsky (international)", desc:"Marily Nika (Meta, Google) sur la transformation du métier de Product Manager par l'IA. Référence internationale.", url:"https://open.spotify.com/episode/0bVVa8dQnvQXCu70oneMsr", themes:["pm","ia"] },
+  { id:"22", type:"podcast", title:"Comptoir IA", date:"", loc:"Podcast", desc:"Des professionnels de tous horizons racontent comment l'IA transforme concrètement leur métier.", url:"https://www.deezer.com/fr/episode/763779161", themes:["ia"] },
+
+  { id:"23", type:"replay", title:"La Product Conf Paris 2025 — Playlist complète", date:"Mai 2025", loc:"Folies Bergère, Paris", desc:"Tous les talks de l'édition 2025 de la conférence produit francophone de référence.", url:"https://www.youtube.com/playlist?list=PLBaIQg089w73T-j1kXpCGnWiFGtEu-u4m", themes:["pm"] },
+  { id:"24", type:"replay", title:"La Product Conf Paris 2025 — Retour en images", date:"Mai 2025", loc:"Paris", desc:"Vidéo récap de l'édition 2025 de La Product Conf Paris.", url:"https://www.youtube.com/watch?v=bdaMQNkGLOI", themes:["pm"] },
+  { id:"25", type:"replay", title:"ProductTank Paris — Chaîne YouTube", date:"En continu", loc:"Paris", desc:"Tous les replays des talks présentés lors des meetups ProductTank Paris.", url:"https://www.youtube.com/channel/UC3CQ4bHE1-0QUUQWAXGJDwg", themes:["pm","design"] },
+  { id:"26", type:"replay", title:"AI Product Day 2025 — Playlist complète", date:"Mars 2025", loc:"Paris — organisé par Hymaïa", desc:"Talks de la première conférence française dédiée aux équipes produit qui veulent exploiter le potentiel de l'IA.", url:"https://www.youtube.com/playlist?list=PL_h6mFCmTXr-vxhjm7thHy8x9nyAEE7Lf", themes:["ia","pm"] },
+  { id:"27", type:"replay", title:"ProductTank Barcelona — AI Edition", date:"", loc:"Barcelone (référence proche)", desc:"Édition spéciale IA de ProductTank, référence pour approfondir le sujet IA x Produit.", url:"https://www.youtube.com/watch?v=0qBRlphuGTA", themes:["ia","pm"] }
+];
+
+const SK = "jb_paris_product_events";
+function loadState() {
+  try { const s = localStorage.getItem(SK); if (s) return JSON.parse(s); } catch(e) {}
+  return { events: DEFAULT_EVENTS };
+}
+function saveState() { localStorage.setItem(SK, JSON.stringify(state)); }
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,5); }
+
+let state = loadState();
+let activeType = "all";
+let activeTheme = "all";
+let searchQ = "";
+let editingId = null;
+let selectedThemes = [];
+
+function buildNav() {
+  const nav = document.getElementById("nav");
+  nav.querySelectorAll(".nav-btn,.nav-lbl,.nav-foot").forEach(el => el.remove());
+  nav.appendChild(makeNavBtn("all", "Tous les événements"));
+  const lbl = document.createElement("div"); lbl.className="nav-lbl"; lbl.textContent="Typologie";
+  nav.appendChild(lbl);
+  Object.entries(TYPES).forEach(([key,cfg]) => nav.appendChild(makeNavBtn(key, cfg.label+"s", cfg.color)));
+  const foot = document.createElement("div"); foot.className="nav-foot";
+  foot.textContent = "Sourcé le 03/07/2026. Les meetups récurrents (agenda non publié) sont à revérifier tous les 2-3 semaines sur Meetup.";
+  nav.appendChild(foot);
+}
+function makeNavBtn(filter, label, dot) {
+  const b = document.createElement("button");
+  b.className = "nav-btn" + (filter===activeType?" active":"");
+  b.dataset.filter = filter;
+  if (dot) { const d=document.createElement("div"); d.className="nav-dot"; d.style.background=dot; b.appendChild(d); }
+  const sp=document.createElement("span"); sp.textContent=label; b.appendChild(sp);
+  const ct=document.createElement("span"); ct.className="nav-count";
+  ct.textContent = filter==="all" ? state.events.length : state.events.filter(p=>p.type===filter).length;
+  b.appendChild(ct);
+  b.addEventListener("click", ()=>{ activeType=filter; buildNav(); render(); });
+  return b;
+}
+
+function buildThemeChips() {
+  const wrap = document.getElementById("theme-chips");
+  wrap.innerHTML = "";
+  const all = document.createElement("button");
+  all.className = "theme-chip" + (activeTheme==="all"?" active":"");
+  all.textContent = "Tous thèmes";
+  all.addEventListener("click", ()=>{ activeTheme="all"; buildThemeChips(); render(); });
+  wrap.appendChild(all);
+  Object.entries(THEMES).forEach(([key,cfg]) => {
+    const c = document.createElement("button");
+    c.className = "theme-chip" + (activeTheme===key?" active":"");
+    c.textContent = cfg.label;
+    c.addEventListener("click", ()=>{ activeTheme = activeTheme===key?"all":key; buildThemeChips(); render(); });
+    wrap.appendChild(c);
+  });
+}
+
+function render() {
+  const grid = document.getElementById("grid");
+  let list = state.events.filter(p => {
+    const mt = activeType==="all"||p.type===activeType;
+    const mth = activeTheme==="all"||(p.themes||[]).includes(activeTheme);
+    const ms = !searchQ||p.title.toLowerCase().includes(searchQ)||(p.desc||"").toLowerCase().includes(searchQ)||(p.loc||"").toLowerCase().includes(searchQ);
+    return mt && mth && ms;
+  });
+  document.getElementById("sec-title").textContent = activeType==="all"?"Tous les événements":(TYPES[activeType]?.label+"s");
+  document.getElementById("sec-count").textContent = list.length ? list.length+" résultat"+(list.length>1?"s":"") : "";
+  grid.innerHTML = "";
+  if (!list.length) { grid.innerHTML='<div class="empty">Aucun résultat.</div>'; return; }
+  list.forEach(p => {
+    const tcfg = TYPES[p.type] || TYPES.meetup;
+    const card = document.createElement("div");
+    card.className = "card";
+    const themeBadges = (p.themes||[]).map(t=>{ const c=THEMES[t]||{}; return `<span class="badge" style="background:${c.bg||'#eee'};color:${c.color||'#333'}">${c.label||t}</span>`; }).join("");
+    card.innerHTML = `
+      <div class="card-edit" data-id="${p.id}" title="Modifier">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </div>
+      <div class="card-top">
+        <span class="type-badge" style="background:${tcfg.bg};color:${tcfg.color}">${tcfg.label}</span>
+        <span class="card-date">${p.date||""}</span>
+      </div>
+      <div class="card-title">${p.title}</div>
+      ${p.loc ? `<div class="card-loc">📍 ${p.loc}</div>` : ""}
+      <div class="card-desc">${p.desc||""}</div>
+      <div class="card-footer">${themeBadges}</div>
+      ${p.url ? `<a class="card-cta" href="${p.url}" target="_blank" rel="noopener">${tcfg.cta} →</a>` : ""}`;
+    card.querySelector(".card-edit").addEventListener("click", e=>{ e.preventDefault(); e.stopPropagation(); openModal(p.id); });
+    grid.appendChild(card);
+  });
+}
+
+function openModal(id) {
+  editingId = id||null;
+  const p = id ? state.events.find(x=>x.id===id) : null;
+  document.getElementById("modal-title").textContent = p?"Modifier l'événement":"Nouvel événement";
+  document.getElementById("f-title").value = p?.title||"";
+  document.getElementById("f-type").value  = p?.type||"meetup";
+  document.getElementById("f-date").value  = p?.date||"";
+  document.getElementById("f-loc").value   = p?.loc||"";
+  document.getElementById("f-desc").value  = p?.desc||"";
+  document.getElementById("f-url").value   = p?.url||"";
+  document.getElementById("btn-delete").style.display = p?"block":"none";
+  selectedThemes = [...(p?.themes||[])];
+  renderChips();
+  document.getElementById("overlay").classList.add("open");
+  setTimeout(()=>document.getElementById("f-title").focus(), 50);
+}
+function closeModal() { document.getElementById("overlay").classList.remove("open"); }
+
+function renderChips() {
+  const wrap = document.getElementById("tags-wrap");
+  wrap.innerHTML = "";
+  Object.entries(THEMES).forEach(([key, cfg]) => {
+    const sel = selectedThemes.includes(key);
+    const chip = document.createElement("div");
+    chip.className = "tag-chip";
+    if (sel) { chip.style.background=cfg.bg; chip.style.color=cfg.color; chip.style.borderColor="transparent"; }
+    chip.innerHTML = `<div class="chip-dot" style="background:${cfg.dot}"></div><span>${cfg.label}</span>`;
+    chip.addEventListener("click", ()=>{ selectedThemes = sel ? selectedThemes.filter(t=>t!==key) : [...selectedThemes,key]; renderChips(); });
+    wrap.appendChild(chip);
+  });
+}
+
+document.getElementById("btn-save").addEventListener("click", ()=>{
+  const title = document.getElementById("f-title").value.trim();
+  if (!title) { document.getElementById("f-title").focus(); return; }
+  const data = { id:editingId||uid(), title, type:document.getElementById("f-type").value, date:document.getElementById("f-date").value.trim(), loc:document.getElementById("f-loc").value.trim(), desc:document.getElementById("f-desc").value.trim(), url:document.getElementById("f-url").value.trim(), themes:[...selectedThemes] };
+  state.events = editingId ? state.events.map(p=>p.id===editingId?data:p) : [data,...state.events];
+  saveState(); buildNav(); render(); closeModal();
+});
+
+document.getElementById("btn-delete").addEventListener("click", ()=>{
+  if (!editingId||!confirm("Supprimer cet événement ?")) return;
+  state.events = state.events.filter(p=>p.id!==editingId);
+  saveState(); buildNav(); render(); closeModal();
+});
+
+document.getElementById("btn-new").addEventListener("click", ()=>openModal(null));
+document.getElementById("modal-close").addEventListener("click", closeModal);
+document.getElementById("overlay").addEventListener("click", e=>{ if(e.target===e.currentTarget) closeModal(); });
+document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeModal(); });
+document.getElementById("search").addEventListener("input", e=>{ searchQ=e.target.value.toLowerCase().trim(); render(); });
+
+buildNav(); buildThemeChips(); render();
+</script>
+</body>
+</html>
